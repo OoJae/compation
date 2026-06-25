@@ -1,0 +1,15 @@
+{
+  "name": "compation",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Autonomous AI agent that hedges NVIDIA H100 GPU compute costs on Injective.",
+  "packageManager": "pnpm@11.1.2",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "pnpm -r test",
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck"
+  }
+}
