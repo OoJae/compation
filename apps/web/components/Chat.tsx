@@ -3,11 +3,13 @@
 import { useState, type ReactNode } from 'react';
 import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport } from 'ai';
-import type { AgentMeta, AnyPart, ComputeOutput, PlaceOutput } from './types';
+import type { AgentMeta, AgentIdentity, AnyPart, ComputeOutput, PlaceOutput } from './types';
 import { DecisionTrail } from './DecisionTrail';
 import { HedgeConfirmation } from './HedgeConfirmation';
 import { HedgeDashboard } from './HedgeDashboard';
+import { IdentityBadge } from './IdentityBadge';
 import { ProxyBadge } from './ProxyBadge';
+import { X402Panel } from './X402Panel';
 
 const EXAMPLE = 'I spend about $40,000/month renting H100 GPUs for my AI startup — hedge most of it.';
 
@@ -18,7 +20,7 @@ const textOf = (parts: AnyPart[]) => parts.filter((p) => p.type === 'text').map(
 const reasoningOf = (parts: AnyPart[]) =>
   parts.filter((p) => p.type === 'reasoning').map((p) => p.text ?? '').join('');
 
-export function Chat({ meta }: { meta: AgentMeta }) {
+export function Chat({ meta, identity }: { meta: AgentMeta; identity: AgentIdentity }) {
   const { messages, sendMessage, status, error } = useChat({
     transport: new DefaultChatTransport({ api: '/api/chat' }),
   });
@@ -101,6 +103,8 @@ export function Chat({ meta }: { meta: AgentMeta }) {
         <DecisionTrail toolParts={toolParts} />
         {compute && <HedgeConfirmation compute={compute} place={place} />}
         {compute?.ok && <HedgeDashboard compute={compute} />}
+        <X402Panel />
+        <IdentityBadge identity={identity} />
         {!compute && messages.length > 0 && busy && (
           <div className="rounded-xl border border-neutral-800 bg-neutral-900/40 p-4 text-xs text-neutral-500">
             Reading the live H100 index and computing the hedge…

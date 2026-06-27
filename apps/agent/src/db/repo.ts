@@ -60,3 +60,25 @@ export async function recordPosition(sessionId: string | null, p: PositionRecord
 export async function getTrail(sessionId: string) {
   return prisma.decisionStep.findMany({ where: { sessionId }, orderBy: { seq: 'asc' } });
 }
+
+export async function recordPaymentReceipt(p: {
+  kind: string;
+  amount: number;
+  denom: string;
+  txHash?: string;
+  sessionId?: string | null;
+}): Promise<void> {
+  try {
+    await prisma.paymentReceipt.create({
+      data: {
+        sessionId: p.sessionId ?? undefined,
+        kind: p.kind,
+        amount: p.amount,
+        denom: p.denom,
+        txHash: p.txHash ?? null,
+      },
+    });
+  } catch {
+    /* best-effort */
+  }
+}

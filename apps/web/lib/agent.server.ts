@@ -12,11 +12,15 @@ import {
   modelInfo,
   createSession,
   recordPosition,
+  recordPaymentReceipt,
+  payForMarketData,
+  getIdentity,
   PrismaTrail,
   streamHedgeTurn,
+  type X402Receipt,
 } from '@compation/agent';
 import { getRoute, getMarketProfile } from '@compation/shared';
-import type { AgentMeta } from '@/components/types';
+import type { AgentMeta, AgentIdentity } from '@/components/types';
 
 // next dev runs with cwd = apps/web → repo root is two up.
 config({ path: resolve(process.cwd(), '../../.env') });
@@ -40,6 +44,19 @@ export function agentMeta(): AgentMeta {
     fallbackTicker: fallbackKey ? getMarketProfile(fallbackKey).marketTicker : null,
     proxy: route.proxy,
   };
+}
+
+export function agentIdentity(): AgentIdentity {
+  return getIdentity();
+}
+
+/** The "agent pays for itself" x402 micropayment (real, settles on-chain). */
+export async function runX402(): Promise<X402Receipt> {
+  const receipt = await payForMarketData();
+  if (receipt.ok) {
+    await recordPaymentReceipt({ kind: 'x402', amount: receipt.amountUsdc, denom: 'USDC', txHash: receipt.txHash });
+  }
+  return receipt;
 }
 
 export async function runChat(messages: UIMessage[]): Promise<Response> {

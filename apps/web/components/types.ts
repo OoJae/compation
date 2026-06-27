@@ -10,6 +10,19 @@ export interface AgentMeta {
   proxy: boolean;
 }
 
+/** Agent identity & economics (client-safe). */
+export interface AgentIdentity {
+  injAddress: string;
+  evmAddress: string;
+  network: 'testnet' | 'mainnet';
+  feeRecipient: string;
+  earnsFees: boolean;
+  erc8004Registry: string;
+  erc8004TokenId?: string;
+  erc8004TxHash?: string;
+  erc8004ExplorerUrl?: string;
+}
+
 /** Shapes of the orchestrator tool outputs the UI reads from streamed parts. */
 export interface ComputeOutput {
   planId: string;
