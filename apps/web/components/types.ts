@@ -68,6 +68,10 @@ export interface PlaceOutput {
   notional?: number;
   margin?: number;
   error?: string;
+  code?: string;
+  /** Order landed on-chain but settlement confirmation lagged (reconciled via position read). */
+  unconfirmed?: boolean;
+  note?: string;
   errors?: { code: string; message: string }[];
 }
 

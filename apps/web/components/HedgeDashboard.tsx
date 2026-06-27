@@ -15,10 +15,11 @@ export function HedgeDashboard({ compute }: { compute: ComputeOutput }) {
   const [pct100, setPct100] = useState(20); // slider, integer percent
   const [liveIndex, setLiveIndex] = useState<number | null>(null);
 
-  // Poll the real on-chain H100 index.
+  // Poll the real on-chain H100 index — paused while the tab is hidden.
   useEffect(() => {
     let alive = true;
     const load = async () => {
+      if (typeof document !== 'undefined' && document.visibilityState === 'hidden') return;
       try {
         const r = await fetch('/api/index', { cache: 'no-store' });
         const j = (await r.json()) as { h100Index: number | null };
@@ -29,9 +30,14 @@ export function HedgeDashboard({ compute }: { compute: ComputeOutput }) {
     };
     void load();
     const id = setInterval(load, 10_000);
+    const onVis = () => {
+      if (document.visibilityState === 'visible') void load();
+    };
+    document.addEventListener('visibilitychange', onVis);
     return () => {
       alive = false;
       clearInterval(id);
+      document.removeEventListener('visibilitychange', onVis);
     };
   }, []);
 
@@ -111,7 +117,7 @@ export function HedgeDashboard({ compute }: { compute: ComputeOutput }) {
       {/* Outcome */}
       <div className="grid grid-cols-3 gap-2 text-center">
         <Stat label="Compute bill" value={usd(sim.newBill)} sub={`${rising ? '+' : ''}${usd(sim.billDelta)}`} subTone={rising ? 'red' : 'emerald'} />
-        <Stat label="Hedge P&L" value={`${sim.hedgePnl >= 0 ? '+' : ''}${usd(sim.hedgePnl)}`} subTone="emerald" sub="long H100" valueTone={sim.hedgePnl >= 0 ? 'emerald' : 'red'} />
+        <Stat label="Hedge P&L" value={`${sim.hedgePnl >= 0 ? '+' : ''}${usd(sim.hedgePnl)}`} subTone="neutral" sub="long H100" valueTone={sim.hedgePnl >= 0 ? 'emerald' : 'red'} />
         <Stat label="Net impact" value={`${sim.netImpact >= 0 ? '+' : ''}${usd(sim.netImpact)}`} sub={`${pct(hedgeRatio)} protected`} valueTone={Math.abs(sim.netImpact) < 1 ? 'neutral' : rising ? 'amber' : 'emerald'} />
       </div>
 

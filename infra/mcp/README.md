@@ -8,9 +8,16 @@ package) and is **gitignored** under `infra/mcp/server/`.
 
 ```bash
 cd infra/mcp
-git clone --depth 1 https://github.com/InjectiveLabs/mcp-server.git server
-cd server && npm install && npm run build
+git clone https://github.com/InjectiveLabs/mcp-server.git server
+cd server
+git checkout main   # pin a specific tag/commit here for a reproducible build
+npm install && npm run build
 ```
+
+> **Status:** the agent's `mcp-executor.ts` is currently a `NotImplemented` stub —
+> the **live execution path is `sdk-ts`** (`EXECUTOR=sdk`). The MCP server is the
+> integrated, flag-selectable sponsor-narrative path, scaffolded for future use.
+> Nothing in the live demo depends on this directory.
 
 ## Run / connect (stdio)
 

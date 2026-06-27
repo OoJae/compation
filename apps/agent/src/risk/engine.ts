@@ -175,7 +175,9 @@ export function buildHedgePlan(
   if (leverage <= 0) throw new HedgeInputError('leverage must be > 0');
 
   const entryPrice = market.price;
-  if (entryPrice <= 0) throw new HedgeInputError('market price must be > 0');
+  // `!(x > 0)` also rejects NaN (a stale/missing oracle read); wording includes
+  // "oracle" so normalizeExecutionError maps it to ORACLE_UNAVAILABLE.
+  if (!(entryPrice > 0)) throw new HedgeInputError('oracle price unavailable (must be > 0)');
 
   // 2. Size: Q → S → quantize down to the size grid.
   const exposureHours = deriveExposureHours(intent, entryPrice);
@@ -291,13 +293,21 @@ export function validatePlan(
     );
   }
 
-  // LiquidationBufferTooClose — keep entry far enough from liquidation.
+  // LiquidationBufferTooClose — keep entry far enough from liquidation. We keep
+  // this a hard refusal (the engine refuses unsafe plans rather than silently
+  // adjusting), but make it actionable: suggest the max leverage that fits.
   if (plan.liquidationBufferPct < plan.liquidationBufferMin - EPS) {
+    const mmr = market.maintenanceMarginRate;
+    const denom = 1 - (1 - mmr) * (1 - plan.liquidationBufferMin);
+    const maxLevForBuffer = denom > EPS ? 1 / denom : NaN;
+    const hint = Number.isFinite(maxLevForBuffer)
+      ? ` Reduce leverage to about ${maxLevForBuffer.toFixed(1)}x.`
+      : '';
     errors.push(
       new PlanError(
         'LiquidationBufferTooClose',
-        `liquidation buffer ${(plan.liquidationBufferPct * 100).toFixed(1)}% is below the required ${(plan.liquidationBufferMin * 100).toFixed(1)}%`,
-        { buffer: plan.liquidationBufferPct, min: plan.liquidationBufferMin },
+        `liquidation buffer ${(plan.liquidationBufferPct * 100).toFixed(1)}% is below the required ${(plan.liquidationBufferMin * 100).toFixed(1)}%.${hint}`,
+        { buffer: plan.liquidationBufferPct, min: plan.liquidationBufferMin, maxLeverage: maxLevForBuffer },
       ),
     );
   }

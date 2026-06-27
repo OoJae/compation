@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { normalizeExecutionError, friendlyTurnError } from './errors';
+import { normalizeExecutionError, friendlyTurnError, isUncertainExecutionError } from './errors';
 import { MainnetWriteBlocked } from './types';
 
 describe('normalizeExecutionError', () => {
@@ -41,5 +41,17 @@ describe('friendlyTurnError', () => {
 
   it('has a safe generic default', () => {
     expect(friendlyTurnError(new Error('weird internal thing'))).toMatch(/try again/i);
+  });
+});
+
+describe('isUncertainExecutionError', () => {
+  it('flags codes where the broadcast may have landed (worth reconciling)', () => {
+    expect(isUncertainExecutionError('RPC_HICCUP')).toBe(true);
+    expect(isUncertainExecutionError('EXECUTION_FAILED')).toBe(true);
+  });
+  it('does not flag codes that definitely never submitted', () => {
+    expect(isUncertainExecutionError('INSUFFICIENT_BALANCE')).toBe(false);
+    expect(isUncertainExecutionError('THIN_LIQUIDITY')).toBe(false);
+    expect(isUncertainExecutionError('MAINNET_GATED')).toBe(false);
   });
 });

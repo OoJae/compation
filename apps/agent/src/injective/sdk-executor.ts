@@ -54,6 +54,43 @@ async function withRetry<T>(fn: () => Promise<T>, tries = 3, baseMs = 250): Prom
   throw lastErr;
 }
 
+/**
+ * Serialize broadcasts from one wallet within this process so two concurrent
+ * requests don't race on the default subaccount's account sequence. Per-instance
+ * only (a serverless backstop, not a cross-instance lock — the sequence-retry
+ * below is the real cross-instance fix).
+ */
+const broadcastLocks = new Map<string, Promise<unknown>>();
+function withWalletLock<T>(key: string, fn: () => Promise<T>): Promise<T> {
+  const prev = (broadcastLocks.get(key) ?? Promise.resolve()).catch(() => {});
+  const next = prev.then(fn);
+  broadcastLocks.set(
+    key,
+    next.catch(() => {}),
+  );
+  return next;
+}
+
+const SEQUENCE_ERR = /account sequence|sequence mismatch|incorrect.*sequence/i;
+
+/**
+ * Retry a broadcast ONCE on an account-sequence-mismatch. Safe: a sequence
+ * mismatch means the tx was rejected (never included), so resending with a
+ * freshly-fetched sequence cannot double-spend. Never retries any other error.
+ */
+export async function withSequenceRetry<T>(fn: () => Promise<T>): Promise<T> {
+  try {
+    return await fn();
+  } catch (e) {
+    const m = e instanceof Error ? e.message : String(e);
+    if (SEQUENCE_ERR.test(m)) {
+      await new Promise((r) => setTimeout(r, 300));
+      return await fn(); // MsgBroadcasterWithPk re-fetches the sequence each call
+    }
+    throw e;
+  }
+}
+
 export class SdkExecutor implements InjectiveExecutor {
   readonly kind = 'sdk' as const;
   private readonly pk: PrivateKey;
@@ -191,10 +228,11 @@ export class SdkExecutor implements InjectiveExecutor {
       quantity: order.chainQuantity,
       feeRecipient: this.address, // protocol fees accrue to the agent wallet
     });
-    const res = (await this.broadcaster(p.network).broadcast({
-      msgs: [msg],
-      memo: `compation open ${venueKey}`,
-    })) as { txHash: string; code?: number; rawLog?: string };
+    const res = (await withWalletLock(this.address, () =>
+      withSequenceRetry(() =>
+        this.broadcaster(p.network).broadcast({ msgs: [msg], memo: `compation open ${venueKey}` }),
+      ),
+    )) as { txHash: string; code?: number; rawLog?: string };
     this.assertOk(res);
     return { txHash: res.txHash, explorerUrl: explorerTxUrl(p.network, res.txHash), venueKey, order };
   }
@@ -218,10 +256,11 @@ export class SdkExecutor implements InjectiveExecutor {
       quantity: humanQtyToChain(pos.quantity, p.minQuantityTick),
       feeRecipient: this.address,
     });
-    const res = (await this.broadcaster(p.network).broadcast({
-      msgs: [msg],
-      memo: `compation close ${venueKey}`,
-    })) as { txHash: string; code?: number; rawLog?: string };
+    const res = (await withWalletLock(this.address, () =>
+      withSequenceRetry(() =>
+        this.broadcaster(p.network).broadcast({ msgs: [msg], memo: `compation close ${venueKey}` }),
+      ),
+    )) as { txHash: string; code?: number; rawLog?: string };
     this.assertOk(res);
     return { txHash: res.txHash, explorerUrl: explorerTxUrl(p.network, res.txHash), venueKey };
   }

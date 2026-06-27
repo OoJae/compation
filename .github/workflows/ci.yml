@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.1.2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma client
+        run: pnpm --filter @compation/agent exec prisma generate
+
+      - name: Typecheck
+        run: |
+          pnpm --filter @compation/agent exec tsc --noEmit
+          pnpm --filter @compation/shared exec tsc --noEmit
+          pnpm --filter @compation/web exec tsc --noEmit
+
+      - name: Test
+        run: pnpm --filter @compation/agent exec vitest run

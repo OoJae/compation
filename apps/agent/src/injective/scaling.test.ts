@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import Decimal from 'decimal.js';
 import {
   quantizeDown,
+  quantizeUp,
   humanPriceToChain,
   humanQtyToChain,
   humanMarginToChain,
@@ -14,6 +15,14 @@ describe('quantizeDown', () => {
     expect(quantizeDown(new Decimal('5.2349'), new Decimal('0.001')).toFixed()).toBe('5.234');
     expect(quantizeDown(new Decimal('114.117'), new Decimal('0.01')).toFixed()).toBe('114.11');
     expect(quantizeDown(new Decimal('0.0005'), new Decimal('0.001')).toFixed()).toBe('0');
+  });
+});
+
+describe('quantizeUp', () => {
+  it('rounds up to the tick', () => {
+    expect(quantizeUp(new Decimal('5.2341'), new Decimal('0.001')).toFixed()).toBe('5.235');
+    expect(quantizeUp(new Decimal('114.111'), new Decimal('0.01')).toFixed()).toBe('114.12');
+    expect(quantizeUp(new Decimal('5.234'), new Decimal('0.001')).toFixed()).toBe('5.234'); // already on tick
   });
 });
 
@@ -78,6 +87,33 @@ describe('buildQuantizedOrder', () => {
     const price = new Decimal(o.chainPrice).div(new Decimal(10).pow(6)); // submitted human price
     const required = price.mul(o.humanQuantity).div(3);
     expect(o.humanMargin).toBeGreaterThanOrEqual(required.toNumber() - 1e-9);
+  });
+
+  it('round-up keeps the cushion AND the margin invariant across many combos (fuzz)', () => {
+    let checked = 0;
+    for (const tick of [0.1, 0.01, 0.001])
+      for (const qtick of [0.001, 0.01])
+        for (const lev of [1, 2, 3, 5])
+          for (const slip of [0, 0.001, 0.005, 0.02])
+            for (let p = 1; p < 400; p += 17)
+              for (let q = qtick; q < 50; q += 7) {
+                const o = buildQuantizedOrder({
+                  quoteDecimals: 6,
+                  tickSize: tick,
+                  minQuantityTick: qtick,
+                  execPrice: p,
+                  quantity: q,
+                  leverage: lev,
+                  maxSlippage: slip,
+                });
+                const padded = p * (1 + slip);
+                // cushion preserved: the submitted limit is >= the padded price
+                expect(o.humanPrice).toBeGreaterThanOrEqual(padded - 1e-9);
+                // chain invariant: margin covers submitted price × qty / leverage
+                expect(o.humanMargin).toBeGreaterThanOrEqual((o.humanPrice * o.humanQuantity) / lev - 1e-9);
+                checked++;
+              }
+    expect(checked).toBeGreaterThan(5000);
   });
 
   it('throws when the size quantizes to zero', () => {

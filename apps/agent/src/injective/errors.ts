@@ -61,6 +61,15 @@ export function normalizeExecutionError(e: unknown): FriendlyError {
   };
 }
 
+/**
+ * Codes where the broadcast MAY have landed despite the thrown error (worth a
+ * position reconciliation), vs. ones that definitely never submitted.
+ */
+const UNCERTAIN_CODES = new Set(['RPC_HICCUP', 'EXECUTION_FAILED']);
+export function isUncertainExecutionError(code: string): boolean {
+  return UNCERTAIN_CODES.has(code);
+}
+
 /** Friendly message for a failed agent turn (model/setup errors), shown in the chat. */
 export function friendlyTurnError(e: unknown): string {
   const raw = e instanceof Error ? e.message : String(e ?? '');

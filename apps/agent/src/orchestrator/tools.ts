@@ -12,6 +12,7 @@ import {
   worstFillPrice,
   toAccountState,
   normalizeExecutionError,
+  isUncertainExecutionError,
   type InjectiveExecutor,
 } from '../injective/index';
 import { projectHedge, type ProjectionResult } from './projection';
@@ -185,6 +186,7 @@ export function makeTools(deps: {
         trail.record({ kind: 'error', toolName: 'place_hedge', content: error });
         return { ok: false, error };
       }
+      let placedVenueKey: string | undefined; // set immediately before broadcast (enables reconciliation)
       try {
         // Re-validate the CONFIRMED plan against fresh live data — project from the
         // STORED intent (not the mutable ctx.intent) so the placed hedge is the one
@@ -212,7 +214,14 @@ export function makeTools(deps: {
         const venuePlan = fresh.venue.plan;
         const venueProfile = getMarketProfile(fresh.venueKey);
         const depth = await executor.getOrderbookDepth(fresh.venueKey);
-        const execPrice = worstFillPrice(depth.asks, venuePlan.size) ?? venuePlan.entryPrice;
+        // A thin book that can't fill this size is a hard abort — don't fall back
+        // to the oracle price (which risks a non-fill).
+        const execPrice = worstFillPrice(depth.asks, venuePlan.size);
+        if (execPrice == null) {
+          const error = 'The venue order book is too thin to fill this size right now — try a smaller size or the deeper fallback venue.';
+          trail.record({ kind: 'error', toolName: 'place_hedge', content: error });
+          return { ok: false, error, code: 'TooThinLiquidity' };
+        }
         const order = buildQuantizedOrder({
           quoteDecimals: venueProfile.quoteDecimals,
           tickSize: venueProfile.tickSize,
@@ -222,6 +231,15 @@ export function makeTools(deps: {
           leverage: venuePlan.leverage,
           maxSlippage: stored.intent.maxSlippage,
         });
+        // Re-check the PADDED broadcast margin (the validated plan used un-padded
+        // oracle margin) against usable balance so the chain doesn't reject + burn gas.
+        const usable = account.availableQuote - account.safetyReserveQuote;
+        if (order.humanMargin + venuePlan.takerFeeQuote > usable + 1e-9) {
+          const error = 'Not enough USDC to post margin at the padded execution price — fund the wallet and retry.';
+          trail.record({ kind: 'error', toolName: 'place_hedge', content: error });
+          return { ok: false, error, code: 'INSUFFICIENT_BALANCE' };
+        }
+        placedVenueKey = fresh.venueKey; // we are about to broadcast — enable reconciliation
         const res = await executor.openHedge(fresh.venueKey, order);
         planStore.markPlaced(planId); // consume only AFTER a successful broadcast
         ctx.result = {
@@ -239,6 +257,34 @@ export function makeTools(deps: {
         return out;
       } catch (e) {
         const fe = normalizeExecutionError(e);
+        // The broadcast may have LANDED despite the error (post-submission timeout).
+        // For uncertain errors, reconcile against the chain before reporting failure.
+        if (placedVenueKey && isUncertainExecutionError(fe.code)) {
+          try {
+            const pos = await executor.getPosition(placedVenueKey);
+            if (pos && pos.direction === 'long' && pos.quantity > 0) {
+              planStore.markPlaced(planId);
+              ctx.result = {
+                txHash: '',
+                explorerUrl: '',
+                venueKey: placedVenueKey,
+                side: 'long',
+                size: pos.quantity,
+                notional: pos.quantity * pos.entryPrice,
+                margin: pos.margin,
+              };
+              deps.onPosition?.({ ...ctx.result });
+              const out = { ok: true, unconfirmed: true, note: 'Settlement confirmation lagged, but the position is open on-chain.', ...ctx.result };
+              trail.record({ kind: 'tool_result', toolName: 'place_hedge', content: out });
+              return out;
+            }
+          } catch {
+            /* reconciliation read failed — fall through to the unconfirmed message */
+          }
+          const msg = 'Order submitted but on-chain confirmation could not be verified — check the explorer or your open positions before retrying.';
+          trail.record({ kind: 'error', toolName: 'place_hedge', content: msg });
+          return { ok: false, error: msg, code: 'SUBMITTED_UNCONFIRMED' };
+        }
         trail.record({ kind: 'error', toolName: 'place_hedge', content: fe });
         return { ok: false, error: fe.message, code: fe.code };
       }

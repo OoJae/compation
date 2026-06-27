@@ -130,7 +130,7 @@ cp .env.example .env
 pnpm install
 
 # 3. Database (Prisma / SQLite at apps/agent/prisma/dev.db)
-pnpm --filter @compation/agent exec prisma db push
+pnpm --filter @compation/agent exec prisma migrate deploy   # or: prisma db push
 
 # 4. Run the app -> http://localhost:3000
 pnpm --filter @compation/web dev

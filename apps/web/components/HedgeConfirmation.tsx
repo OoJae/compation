@@ -107,9 +107,18 @@ export function HedgeConfirmation({ compute, place }: { compute: ComputeOutput; 
         </div>
       )}
 
+      {place?.ok && !place.txHash && place.unconfirmed && (
+        <div className="border-t border-amber-900/40 bg-amber-950/20 p-4 text-xs text-amber-200">
+          <div className="text-sm font-medium text-amber-300">● Position open · confirmation lagged</div>
+          <p className="mt-1 leading-relaxed">
+            {place.note ?? 'The order is on-chain; settlement confirmation was delayed. Verify it in your positions.'}
+          </p>
+        </div>
+      )}
+
       {place && place.ok === false && (
         <div className="border-t border-red-900/40 bg-red-950/20 p-3 text-xs text-red-300">
-          Execution failed: {place.error}
+          {place.code === 'SUBMITTED_UNCONFIRMED' ? place.error : `Execution failed: ${place.error}`}
         </div>
       )}
     </div>

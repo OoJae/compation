@@ -21,6 +21,13 @@ export function quantizeDown(value: Decimal, tick: Decimal): Decimal {
   return value.div(tick).floor().mul(tick).toDecimalPlaces(tickDecimals, Decimal.ROUND_DOWN);
 }
 
+/** Quantize a value UP to the nearest multiple of `tick` (float-artifact safe). */
+export function quantizeUp(value: Decimal, tick: Decimal): Decimal {
+  if (tick.lte(0)) return value;
+  const tickDecimals = Math.max(0, -tick.e);
+  return value.div(tick).ceil().mul(tick).toDecimalPlaces(tickDecimals, Decimal.ROUND_UP);
+}
+
 const pow10 = (n: number) => new Decimal(10).pow(n);
 
 /** humanPrice → chain integer string, quantized down to the chain tick. */
@@ -70,20 +77,24 @@ export function buildQuantizedOrder(args: BuildOrderArgs): QuantizedOrder {
 
   const exec = new Decimal(args.execPrice);
   const paddedPrice = exec.mul(new Decimal(1).plus(maxSlippage)); // long → pad up
+  // Round the BUY limit UP to the tick so down-quantization can't erode the
+  // slippage cushion; derive margin from this SAME submitted price so the chain
+  // invariant `price×qty/lev ≤ margin` still holds.
+  const submitPrice = quantizeUp(paddedPrice, new Decimal(tickSize));
   const qty = quantizeDown(new Decimal(args.quantity), new Decimal(minQuantityTick));
   if (qty.lte(0)) {
     throw new Error(`quantized quantity rounds to 0 (size ${args.quantity}, tick ${minQuantityTick})`);
   }
 
-  const marginHuman = paddedPrice.mul(qty).div(new Decimal(leverage));
+  const marginHuman = submitPrice.mul(qty).div(new Decimal(leverage));
   const orderType: OrderTypeCode = 1;
 
   return {
     orderType,
-    chainPrice: humanPriceToChain(paddedPrice.toNumber(), quoteDecimals, tickSize),
+    chainPrice: humanPriceToChain(submitPrice.toNumber(), quoteDecimals, tickSize),
     chainQuantity: qty.toFixed(),
     chainMargin: humanMarginToChain(marginHuman.toNumber(), quoteDecimals),
-    humanPrice: paddedPrice.toNumber(),
+    humanPrice: submitPrice.toNumber(),
     humanQuantity: qty.toNumber(),
     humanMargin: marginHuman.toNumber(),
   };

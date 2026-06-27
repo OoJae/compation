@@ -250,6 +250,10 @@ describe('buildHedgePlan', () => {
     expect(p.warnings.map((w) => w.code)).toContain('LeverageClamped');
   });
 
+  it('throws an oracle-flavoured error when the market price is NaN (stale read)', () => {
+    expect(() => buildHedgePlan(intent(), market({ price: NaN }), deepBook, account())).toThrow(/oracle/i);
+  });
+
   it('raises a sub-minNotional size up to the floor with a warning', () => {
     // tiny spend → tiny size, below minNotional
     const p = buildHedgePlan(
@@ -297,7 +301,7 @@ describe('validatePlan', () => {
     expect(r.plan).toBeUndefined();
   });
 
-  it('flags LiquidationBufferTooClose when leverage is forced high', () => {
+  it('flags LiquidationBufferTooClose when leverage is forced high, and suggests a max leverage', () => {
     // 5x ⇒ ~16% buffer < 40% required; deep book + big balance isolate the buffer
     const r = assessHedge(
       intent({ leverage: 5 }),
@@ -307,6 +311,8 @@ describe('validatePlan', () => {
     );
     expect(r.ok).toBe(false);
     expect(codes(r)).toContain('LiquidationBufferTooClose');
+    const e = r.errors.find((x) => x.code === 'LiquidationBufferTooClose');
+    expect(e?.message).toMatch(/reduce leverage/i);
   });
 
   it('flags TooThinLiquidity when the book cannot fill the size', () => {
