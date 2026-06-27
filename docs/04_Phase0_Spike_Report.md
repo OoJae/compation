@@ -36,10 +36,19 @@ _Scripts: [`apps/agent/scripts/read-markets.ts`](../apps/agent/scripts/read-mark
 - **Collateral is USDC** everywhere (not USDT). `.env.example` and the executor use USDC.
 - Confirmed values are wired into [`packages/shared/src/markets.ts`](../packages/shared/src/markets.ts) (`MARKETS` + `ROUTES`).
 
+## Phase 0.2 — signing → broadcast → finality verified (testnet, 2026-06-27)
+
+Agent wallet `inj1t4a8x0fs2949c4x3lfsqzw7tnl7fyf0jdeyu7v` (self-generated, key in `.env`). Funded via the Injective faucet: `1 INJ` + **20 testnet USDC** (`erc20:0x0C382…`, the exact `testnet:INJ_USDC` margin denom) + 10 testnet USDT. Real txs ([`scripts/testnet-proof.ts`](../apps/agent/scripts/testnet-proof.ts)):
+- bank `MsgSend` self → `EC949207…` ✅
+- `MsgDeposit` → subaccount 1 → `0932094B…` ✅, `MsgWithdraw` ← subaccount 1 → `307B37F3…` ✅
+
+**Executor-design finding (important):** on Injective the **default subaccount (index 0) IS the bank balance** — `MsgDeposit` into it is rejected ("subaccount id is not valid"); trading from the default subaccount draws **directly from the bank USDC balance**. Explicit deposit/withdraw only applies to **non-default** subaccounts (index ≥ 1). ⇒ the SdkExecutor trades from the default subaccount with **no deposit step** (simpler than the build plan's `subaccount_deposit` assumption).
+
 ## Spike status vs. plan
 | Spike step | Status |
 |---|---|
-| 0.1 Read H100 + venues (mainnet & testnet) | ✅ done (this report) |
-| 0.2 Tiny open+close on testnet | ⏳ Tier B (executor) — testnet thin, FakeExecutor first |
+| 0.1 Read H100 + venues (mainnet & testnet) | ✅ done |
+| 0.2 Signing/broadcast/finality on testnet (deposit/withdraw + send) | ✅ done — 3 real txs |
+| 0.2b Real perp open/close | ⏳ Tier B executor (testnet thin → clean fill on mainnet NVDA) |
 | 0.3 x402 payment to `agents.injective.com/x402` | ⏳ Phase 2 (wallet funding gate) |
 | 0.4 `inj-agent register` (ERC-8004) | ⏳ Phase 2 |

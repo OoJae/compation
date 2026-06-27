@@ -10,6 +10,7 @@
     "spike:read": "tsx scripts/read-markets.ts",
     "wallet:gen": "tsx scripts/gen-wallet.ts",
     "wallet:status": "tsx scripts/wallet-status.ts",
+    "testnet:proof": "tsx scripts/testnet-proof.ts",
     "azure:smoke": "tsx scripts/azure-smoke.ts"
   },
   "dependencies": {
