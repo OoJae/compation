@@ -101,7 +101,7 @@ Every claim below is a verifiable on-chain artifact.
 | **Headline trade venue** (proxy) | `NVDA/USDC PERP` · marketId `0xb9d9202c588e860382c96aee096f9655fce339f6b51833a939a37d2437080c17` · NVIDIA makes the H100 — thematically tight, active, deep book |
 | **Fallback venue** | `INJ/USDC PERP` · marketId `0x790aee464fbbd02cf4476444554c71d1225f7edfe15e6dc7f874c455fd883d31` · deepest book |
 | **Collateral** | USDC · trades execute from the **default subaccount**, drawing on the bank balance |
-| **Execution** | **Injective MCP server (37 tools)** + `@injectivelabs/sdk-ts` for signing/broadcast |
+| **Execution** | `@injectivelabs/sdk-ts` for signing/broadcast (the live path); the **Injective MCP server (37 tools)** is integrated for tool discovery — an MCP execution path is scaffolded for future use |
 | **x402 self-payment** | `https://agents.injective.com/api/x402/perps/market-data` · pays **0.01 USDC** on Injective EVM (chain `1439`, `eip155:1439`) via **EIP-3009 gasless USDC** (Circle FiatTokenV2_2); Injective's facilitator settles on testnet · panel shows tx hash + explorer link + latency |
 | **ERC-8004 identity** | **Identity NFT #49** — registry (testnet) `0x8004A818BFB912233c491871b3d84c89A494BD9e`, (mainnet) `0x8004A169FB4a3325136EB29fA0ceB6D2e539a432` · registration tx confirmed at block `131740980` → [**view on Blockscout**](https://testnet.blockscout.injective.network/tx/0x0c96c4816f814e77d699ce9f00800c95d7d64abafcc5a3f250f3f3278452aea0) |
 | **Agent wallet** | `inj1t4a8x0fs2949c4x3lfsqzw7tnl7fyf0jdeyu7v` · EVM `0x5d7a733D30516A5c54d1FA60013bCB9ffc9225f2` · **feeRecipient on every order** → earns protocol fee rebates |
@@ -130,7 +130,7 @@ cp .env.example .env
 pnpm install
 
 # 3. Database (Prisma / SQLite at apps/agent/prisma/dev.db)
-pnpm --filter @compation/agent exec prisma migrate dev
+pnpm --filter @compation/agent exec prisma db push
 
 # 4. Run the app -> http://localhost:3000
 pnpm --filter @compation/web dev
@@ -169,7 +169,7 @@ compation/
 ```
 
 **Stack:** TypeScript end-to-end, pnpm workspaces.
-**Tests:** **59 agent unit tests** (risk engine 33, decimal scaling 13, what-if 5, others).
+**Tests:** **67 agent unit tests** (risk engine 33, decimal scaling 13, error-normalizer 8, orchestrator 8, what-if 5).
 
 ---
 
@@ -186,8 +186,8 @@ Step-by-step walkthrough: [`docs/05_demo_script.md`](docs/05_demo_script.md)
 
 | Criterion | How Compation meets it |
 |---|---|
-| **Innovation** | First AI agent on the on-chain H100 compute-derivative market; assembles H100 hedging + ERC-8004 identity + x402 self-payment — a combination never built before. |
-| **Technical implementation** | Real on-chain execution via the Injective MCP server / sdk-ts; deterministic risk engine; ERC-8004 identity; x402 settlement; 59 unit tests. |
+| **Innovation** | Among the first AI agents on the on-chain H100 compute-derivative market; assembles H100 hedging + ERC-8004 identity + x402 self-payment — a combination we haven't seen built before. |
+| **Technical implementation** | Real on-chain execution via `@injectivelabs/sdk-ts` (MCP integrated); deterministic risk engine; ERC-8004 identity; x402 settlement; 67 unit tests. |
 | **Application value** | Hedges the largest cost for every AI company; clear ICP (AI startups renting H100s); built-in monetization via fee rebates + x402. |
 | **Product experience** | Natural-language intake, plain-language confirmations, a transparent decision trail, and a what-if simulator — AI lowers the barrier to a previously trader-only action. |
 | **Ecological compatibility** | A registered Injective economic actor (ERC-8004) earning protocol fees; uses Injective + Microsoft Azure end-to-end; clear incubation / expansion path. |

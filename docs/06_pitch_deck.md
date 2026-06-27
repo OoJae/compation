@@ -99,9 +99,9 @@ speaker note: If running live, reset first (`demo:reset`) — it clears the deci
 
 **Headline:** DeFAI is the hottest 2026 narrative — and we assembled the only-just-arrived pieces first.
 
-- The on-chain H100 market, ERC-8004 identity, and x402 self-payment **all arrived recently** — and have **never been combined**
-- First AI agent on the on-chain H100 compute-derivative market
-- Real on-chain execution, a deterministic risk engine, and **59 agent unit tests** (risk engine 33, decimal scaling 13, what-if 5, others)
+- The on-chain H100 market, ERC-8004 identity, and x402 self-payment **all arrived recently** — a combination we haven't seen built before
+- Among the first AI agents on the on-chain H100 compute-derivative market
+- Real on-chain execution, a deterministic risk engine, and **67 agent unit tests** (risk engine 33, decimal scaling 13, error-normalizer 8, orchestrator 8, what-if 5)
 - TypeScript end-to-end, pnpm workspaces — Next.js 16 / React 19 web, agent orchestrator, shared markets registry, Injective MCP
 
 speaker note: The moat is integration timing — we shipped the combination first.

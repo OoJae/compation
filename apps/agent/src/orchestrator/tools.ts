@@ -25,8 +25,10 @@ export const assessExposureSchema = z.object({
   hedgeRatio: z.number().gt(0).lte(1).default(0.8).describe('fraction of the exposure to hedge'),
   leverage: z.number().positive().max(5).default(2),
   horizonMonths: z.number().positive().default(1),
-  liquidationBufferMin: z.number().min(0).max(1).default(0.4),
-  maxSlippage: z.number().min(0).max(0.5).default(0.005),
+  // Policy floors/ceilings — bounded here AND re-clamped server-side in assess_exposure
+  // so a crafted prompt can't talk the agent into a thin-book / near-liquidation entry.
+  liquidationBufferMin: z.number().min(0.2).max(1).default(0.4),
+  maxSlippage: z.number().min(0).max(0.02).default(0.005),
 });
 export const computeHedgeSchema = z.object({});
 export const placeHedgeSchema = z.object({ planId: z.string() });
@@ -118,14 +120,20 @@ export function makeTools(deps: {
       // Spend wins when both are present (the model sometimes adds a filler
       // monthlyHours). The risk engine otherwise prefers hours.
       const useSpend = input.monthlySpendQuote != null;
+      // Re-clamp risk caps server-side — never trust model-supplied safety thresholds.
+      const maxSlippage = Math.min(input.maxSlippage, 0.02);
+      const liquidationBufferMin = Math.max(input.liquidationBufferMin, 0.2);
+      if (maxSlippage !== input.maxSlippage || liquidationBufferMin !== input.liquidationBufferMin) {
+        trail.record({ kind: 'observation', toolName: 'assess_exposure', content: 'Risk caps clamped to policy bounds (slippage ≤ 2%, liq-buffer ≥ 20%).' });
+      }
       ctx.intent = {
         monthlySpendQuote: useSpend ? input.monthlySpendQuote : undefined,
         monthlyHours: useSpend ? undefined : input.monthlyHours,
         hedgeRatio: input.hedgeRatio,
         horizonMonths: input.horizonMonths,
         leverage: input.leverage,
-        liquidationBufferMin: input.liquidationBufferMin,
-        maxSlippage: input.maxSlippage,
+        liquidationBufferMin,
+        maxSlippage,
       };
       const out = { ok: true, intent: ctx.intent };
       trail.record({ kind: 'tool_result', toolName: 'assess_exposure', content: out });
@@ -166,21 +174,40 @@ export function makeTools(deps: {
     execute: async ({ planId }) => {
       trail.record({ kind: 'tool_call', toolName: 'place_hedge', content: { planId } });
       const stored = planStore.get(planId);
-      if (!stored || !ctx.intent) {
+      if (!stored) {
         const error = 'Unknown planId — run compute_hedge first.';
         trail.record({ kind: 'error', toolName: 'place_hedge', content: error });
         return { ok: false, error };
       }
+      // Single-use: a plan is consumed once placed, and a turn places at most one hedge.
+      if (stored.placed || ctx.result) {
+        const error = 'This hedge was already placed — run compute_hedge for a new one.';
+        trail.record({ kind: 'error', toolName: 'place_hedge', content: error });
+        return { ok: false, error };
+      }
       try {
-        // Drift guard: re-fetch live data and re-validate before broadcasting.
+        // Re-validate the CONFIRMED plan against fresh live data — project from the
+        // STORED intent (not the mutable ctx.intent) so the placed hedge is the one
+        // the user approved.
         const balance = await executor.getBankBalance(ctx.route.primaryVenueKey);
         const account = toAccountState(balance, reserveFor(balance));
-        const fresh = await projectHedge(ctx.intent, ctx.route, executor, account);
+        const fresh = await projectHedge(stored.intent, ctx.route, executor, account);
         if (!fresh.venue.ok || !fresh.venue.plan) {
           const codes = fresh.venue.errors.map((e) => e.code);
           const error = `Plan no longer valid (market moved): ${codes.join(', ')}`;
           trail.record({ kind: 'error', toolName: 'place_hedge', content: error });
           return { ok: false, error, errors: fresh.venue.errors.map((e) => ({ code: e.code, message: e.message })) };
+        }
+        // Drift guard: the executed plan must match the confirmed one (same venue,
+        // notional within tolerance) — otherwise make the model re-confirm.
+        const approved = stored.projection.venue.plan;
+        if (approved) {
+          const drift = Math.abs(fresh.venue.plan.notional - approved.notional) / approved.notional;
+          if (fresh.venueKey !== stored.projection.venueKey || drift > 0.02) {
+            const error = 'Plan drifted (market moved or venue changed) — re-run compute_hedge to confirm a fresh hedge.';
+            trail.record({ kind: 'error', toolName: 'place_hedge', content: error });
+            return { ok: false, error, code: 'PLAN_DRIFTED' };
+          }
         }
         const venuePlan = fresh.venue.plan;
         const venueProfile = getMarketProfile(fresh.venueKey);
@@ -193,9 +220,10 @@ export function makeTools(deps: {
           execPrice,
           quantity: venuePlan.size,
           leverage: venuePlan.leverage,
-          maxSlippage: ctx.intent.maxSlippage,
+          maxSlippage: stored.intent.maxSlippage,
         });
         const res = await executor.openHedge(fresh.venueKey, order);
+        planStore.markPlaced(planId); // consume only AFTER a successful broadcast
         ctx.result = {
           txHash: res.txHash,
           explorerUrl: res.explorerUrl,

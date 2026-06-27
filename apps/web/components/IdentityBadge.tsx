@@ -39,7 +39,7 @@ export function IdentityBadge({ identity }: { identity: AgentIdentity }) {
       <div className="space-y-1.5 text-xs">
         <Row label="agent (inj)" value={short(identity.injAddress)} mono copyValue={identity.injAddress} />
         <Row label="agent (evm)" value={short(identity.evmAddress)} mono copyValue={identity.evmAddress} />
-        <Row label="fee recipient" value="earns protocol fee rebates" tone="emerald" />
+        <Row label="fee recipient" value="its own — no relayer skim" tone="emerald" />
         {identity.erc8004TokenId ? (
           <Row label="ERC-8004" value={`registered · #${identity.erc8004TokenId}`} tone="emerald" />
         ) : (
@@ -57,8 +57,8 @@ export function IdentityBadge({ identity }: { identity: AgentIdentity }) {
         </a>
       )}
       <p className="mt-2 text-[11px] leading-relaxed text-neutral-500">
-        Compation&apos;s wallet is the fee recipient on every order — it earns Injective protocol fees as it hedges. A
-        built-in business model, on-chain.
+        Compation is the <span className="font-mono">feeRecipient</span> on every order it signs — the Injective relayer
+        fee-share accrues to the agent, not a middleman. The seed of a built-in, on-chain business model.
       </p>
     </div>
   );

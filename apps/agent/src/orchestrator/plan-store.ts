@@ -7,6 +7,8 @@ export interface StoredPlan {
   intent: HedgeIntent;
   projection: ProjectionResult;
   createdAt: number;
+  /** Set once the plan has been broadcast — a plan is single-use. */
+  placed?: boolean;
 }
 
 export class PlanStore {
@@ -21,5 +23,11 @@ export class PlanStore {
 
   get(planId: string): StoredPlan | undefined {
     return this.map.get(planId);
+  }
+
+  /** Mark a plan consumed AFTER a successful broadcast (so a failed broadcast stays replayable). */
+  markPlaced(planId: string): void {
+    const s = this.map.get(planId);
+    if (s) s.placed = true;
   }
 }

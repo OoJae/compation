@@ -36,6 +36,24 @@ interface ReadClients {
 
 const CLOSE_SLIPPAGE = 0.01;
 
+/**
+ * Retry an IDEMPOTENT read a few times on a transient RPC blip (so one flaky
+ * testnet gRPC call doesn't abort a whole hedge turn). NEVER wrap a broadcast —
+ * writes are not idempotent.
+ */
+async function withRetry<T>(fn: () => Promise<T>, tries = 3, baseMs = 250): Promise<T> {
+  let lastErr: unknown;
+  for (let i = 0; i < tries; i++) {
+    try {
+      return await fn();
+    } catch (e) {
+      lastErr = e;
+      if (i < tries - 1) await new Promise((r) => setTimeout(r, baseMs * (i + 1)));
+    }
+  }
+  throw lastErr;
+}
+
 export class SdkExecutor implements InjectiveExecutor {
   readonly kind = 'sdk' as const;
   private readonly pk: PrivateKey;
@@ -83,12 +101,15 @@ export class SdkExecutor implements InjectiveExecutor {
   }
 
   private async oraclePrice(p: MarketProfile): Promise<number> {
-    const r = (await this.clients(p.network).oracle.fetchOraclePriceNoThrow({
-      baseSymbol: p.oracleBase,
-      quoteSymbol: p.oracleQuote,
-      oracleType: p.oracleType,
-    } as never)) as { price?: string };
-    return Number(r?.price ?? 0);
+    const r = (await withRetry(() =>
+      this.clients(p.network).oracle.fetchOraclePriceNoThrow({
+        baseSymbol: p.oracleBase,
+        quoteSymbol: p.oracleQuote,
+        oracleType: p.oracleType,
+      } as never),
+    )) as { price?: string };
+    const price = Number(r?.price ?? 0);
+    return Number.isFinite(price) && price > 0 ? price : 0;
   }
 
   async getIndexPrice(indexKey: string): Promise<number> {
@@ -112,7 +133,7 @@ export class SdkExecutor implements InjectiveExecutor {
 
   async getOrderbookDepth(venueKey: string): Promise<OrderbookDepth> {
     const p = getMarketProfile(venueKey);
-    const ob = (await this.clients(p.network).deriv.fetchOrderbookV2(p.marketId)) as {
+    const ob = (await withRetry(() => this.clients(p.network).deriv.fetchOrderbookV2(p.marketId))) as {
       sells?: { price: string; quantity: string }[];
     };
     return chainSellsToDepth(ob.sells ?? [], p.quoteDecimals);
@@ -120,19 +141,23 @@ export class SdkExecutor implements InjectiveExecutor {
 
   async getBankBalance(venueKey: string): Promise<number> {
     const p = getMarketProfile(venueKey);
-    const bal = (await this.clients(p.network).bank.fetchBalance({
-      accountAddress: this.address,
-      denom: p.quoteDenom,
-    })) as { amount?: string };
+    const bal = (await withRetry(() =>
+      this.clients(p.network).bank.fetchBalance({
+        accountAddress: this.address,
+        denom: p.quoteDenom,
+      }),
+    )) as { amount?: string };
     return new Decimal(bal.amount ?? '0').div(new Decimal(10).pow(p.quoteDecimals)).toNumber();
   }
 
   async getPosition(venueKey: string): Promise<OnChainPosition | null> {
     const p = getMarketProfile(venueKey);
-    const res = (await this.clients(p.network).deriv.fetchPositionsV2({
-      subaccountId: this.subaccountId,
-      marketIds: [p.marketId],
-    } as never)) as { positions?: RawPosition[] };
+    const res = (await withRetry(() =>
+      this.clients(p.network).deriv.fetchPositionsV2({
+        subaccountId: this.subaccountId,
+        marketIds: [p.marketId],
+      } as never),
+    )) as { positions?: RawPosition[] };
     const pos = (res.positions ?? []).find((x) => x.marketId === p.marketId);
     if (!pos) return null;
     const scale = new Decimal(10).pow(p.quoteDecimals);

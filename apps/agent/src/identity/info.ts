@@ -32,17 +32,17 @@ export function getIdentity(env: NodeJS.ProcessEnv = process.env): AgentIdentity
   const evmAddress = env.INJECTIVE_WALLET_ETH_ADDRESS ?? '';
   const tokenId = env.ERC8004_TOKEN_ID;
   const txHash = env.ERC8004_TX_HASH;
-  const explorerBase = network === 'mainnet'
-    ? 'https://blockscout.injective.network/tx/'
-    : 'https://testnet.blockscout.injective.network/tx/';
+  // ERC-8004 #49 is registered on TESTNET — pin its registry + explorer there
+  // regardless of the trading route, so the verifiability link never 404s.
+  const erc8004ExplorerBase = 'https://testnet.blockscout.injective.network/tx/';
   return {
     injAddress,
     evmAddress,
     network,
     feeRecipient: injAddress, // the executor passes this on every MsgCreateDerivativeMarketOrder
     earnsFees: true,
-    erc8004Registry: ERC8004_IDENTITY_REGISTRY[network],
+    erc8004Registry: ERC8004_IDENTITY_REGISTRY.testnet,
     ...(tokenId ? { erc8004TokenId: tokenId } : {}),
-    ...(txHash ? { erc8004TxHash: txHash, erc8004ExplorerUrl: explorerBase + txHash } : {}),
+    ...(txHash ? { erc8004TxHash: txHash, erc8004ExplorerUrl: erc8004ExplorerBase + txHash } : {}),
   };
 }

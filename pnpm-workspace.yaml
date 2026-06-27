@@ -1,6 +1,9 @@
 packages:
   - "apps/*"
   - "packages/*"
+# pnpm 11 build-script allowlist (this IS the valid key for pnpm 11.x; the
+# pnpm-10 equivalent was `onlyBuiltDependencies`). Without it, pnpm blocks the
+# prisma/esbuild/sharp postinstalls (ERR_PNPM_IGNORED_BUILDS) on a clean install.
 allowBuilds:
   '@prisma/client': true
   '@prisma/engines': true

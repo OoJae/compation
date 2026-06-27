@@ -54,7 +54,9 @@ export function agentIdentity(): AgentIdentity {
 /** The "agent pays for itself" x402 micropayment (real, settles on-chain). */
 export async function runX402(): Promise<X402Receipt> {
   const receipt = await payForMarketData();
-  if (receipt.ok) {
+  // Record whenever a settlement tx exists — a tx can land even if confirmation
+  // flakes, so binding on txHash (not ok) avoids losing a real on-chain payment.
+  if (receipt.txHash) {
     await recordPaymentReceipt({ kind: 'x402', amount: receipt.amountUsdc, denom: 'USDC', txHash: receipt.txHash });
   }
   return receipt;

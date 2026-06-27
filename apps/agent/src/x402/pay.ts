@@ -40,17 +40,21 @@ export async function payForMarketData(env: NodeJS.ProcessEnv = process.env): Pr
     const m = data?.markets?.[0];
     const dataPreview = m?.ticker ? `${m.ticker} @ ${Number(m.markPrice ?? 0).toFixed(4)}` : (data?.status ?? 'market data');
     const txHash = receipt?.transaction || undefined; // "" on failure → undefined
+    const ok = Boolean(receipt?.success);
     return {
       ...base,
-      ok: Boolean(receipt?.success),
+      ok,
       latencyMs,
       txHash,
       explorerUrl: txHash ? `https://testnet.blockscout.injective.network/tx/${txHash}` : undefined,
       payer: receipt?.payer,
       network: receipt?.network ?? NETWORK,
       dataPreview: String(dataPreview).slice(0, 80),
+      ...(ok ? {} : { error: 'settlement not confirmed' }),
     };
   } catch (e) {
-    return { ...base, latencyMs: Date.now() - t0, error: (e as Error)?.message ?? 'x402 payment failed' };
+    // Don't leak raw SDK/RPC internals to anonymous clients; log server-side.
+    console.error('[x402] payment failed:', e);
+    return { ...base, latencyMs: Date.now() - t0, error: 'x402 payment failed' };
   }
 }

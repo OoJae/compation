@@ -35,18 +35,20 @@ export function HedgeDashboard({ compute }: { compute: ComputeOutput }) {
     };
   }, []);
 
+  const displayIndex = liveIndex ?? P0; // header + slider baseline use the same number
   const delta = pct100 / 100;
   const sim = useMemo(() => {
-    const billDelta = monthlyBill * delta;
-    const hedgePnl = hedgeRatio * billDelta;
+    // Round the components once so the three stat cards satisfy net = bill − hedge exactly.
+    const billDelta = Math.round(monthlyBill * delta);
+    const hedgePnl = Math.round(hedgeRatio * monthlyBill * delta);
     return {
-      newIndex: P0 * (1 + delta),
-      newBill: monthlyBill * (1 + delta),
+      newIndex: displayIndex * (1 + delta),
+      newBill: monthlyBill + billDelta,
       billDelta,
       hedgePnl,
       netImpact: billDelta - hedgePnl,
     };
-  }, [monthlyBill, hedgeRatio, delta, P0]);
+  }, [monthlyBill, hedgeRatio, delta, displayIndex]);
 
   const rising = delta >= 0;
   const barFrac = Math.min(1, Math.abs(delta) / 0.5); // full bar at ±50%
@@ -60,7 +62,7 @@ export function HedgeDashboard({ compute }: { compute: ComputeOutput }) {
         <span className="inline-flex items-center gap-1.5 text-xs text-neutral-400">
           <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
           H100 index{' '}
-          <span className="tnum text-emerald-300">{liveIndex ? `${usd(liveIndex)}/hr` : `${usd(P0)}/hr`}</span>
+          <span className="tnum text-emerald-300">{usd(displayIndex)}/hr</span>
         </span>
       </div>
 
@@ -85,6 +87,8 @@ export function HedgeDashboard({ compute }: { compute: ComputeOutput }) {
           step={1}
           value={pct100}
           onChange={(e) => setPct100(Number(e.target.value))}
+          aria-label="H100 rental rate change"
+          aria-valuetext={`${rising ? '+' : ''}${pct100} percent`}
           className="w-full accent-emerald-500"
         />
         <div className="mt-1 flex gap-1">
@@ -92,6 +96,7 @@ export function HedgeDashboard({ compute }: { compute: ComputeOutput }) {
             <button
               key={p}
               onClick={() => setPct100(p)}
+              aria-pressed={pct100 === p}
               className={`rounded px-1.5 py-0.5 text-[11px] ${
                 pct100 === p ? 'bg-neutral-700 text-neutral-100' : 'text-neutral-500 hover:text-neutral-300'
               }`}
