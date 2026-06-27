@@ -11,19 +11,24 @@
     "wallet:gen": "tsx scripts/gen-wallet.ts",
     "wallet:status": "tsx scripts/wallet-status.ts",
     "testnet:proof": "tsx scripts/testnet-proof.ts",
-    "azure:smoke": "tsx scripts/azure-smoke.ts"
+    "azure:smoke": "tsx scripts/azure-smoke.ts",
+    "hedge": "tsx scripts/run-hedge.ts",
+    "position:close": "tsx scripts/close-position.ts"
   },
   "dependencies": {
     "@ai-sdk/azure": "^3.0.74",
     "@compation/shared": "workspace:*",
     "@injectivelabs/networks": "^1.19.12",
     "@injectivelabs/sdk-ts": "^1.19.12",
+    "@prisma/client": "^6.2.0",
     "ai": "^7.0.0",
+    "decimal.js": "^10.4.3",
     "dotenv": "^16.4.7",
     "zod": "^3.25.0"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
+    "prisma": "^6.2.0",
     "typescript": "^5.7.3",
     "vitest": "^3.0.5",
     "tsx": "^4.19.2"
