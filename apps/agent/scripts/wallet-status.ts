@@ -2,7 +2,7 @@
  * Show the agent wallet's balances on testnet + mainnet, and what still needs
  * funding. Read-only. Run: pnpm --filter @compation/agent wallet:status
  */
-import { loadEnv, humanizeAmount } from './_shared.js';
+import { loadEnv, humanizeAmount } from './_shared';
 loadEnv();
 
 import {

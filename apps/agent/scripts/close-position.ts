@@ -2,9 +2,9 @@
  * Show and (if open) close the position on a venue. Also a demo-reset helper.
  *   EXECUTOR=sdk pnpm --filter @compation/agent position:close [venueKey]
  */
-import { loadEnv } from './_shared.js';
+import { loadEnv } from './_shared';
 loadEnv();
-import { createExecutor } from '../src/injective/index.js';
+import { createExecutor } from '../src/injective/index';
 
 const venueKey = process.argv.slice(2).find((a) => !a.startsWith('--')) ?? 'testnet:INJ_USDC';
 

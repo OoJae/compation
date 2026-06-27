@@ -4,7 +4,7 @@
  */
 import Decimal from 'decimal.js';
 import type { MarketProfile } from '@compation/shared';
-import type { MarketParams, OrderbookDepth, AccountState, DepthLevel } from '../risk/index.js';
+import type { MarketParams, OrderbookDepth, AccountState, DepthLevel } from '../risk/index';
 
 /** MarketProfile + live price/funding → risk-engine MarketParams. */
 export function toMarketParams(

@@ -32,29 +32,9 @@ export async function getModel(): Promise<LanguageModel> {
     return cached;
   }
 
-  const fb = process.env.FALLBACK_OPENAI_API_KEY;
-  if (fb) {
-    try {
-      // Variable specifier keeps @ai-sdk/openai an OPTIONAL (uninstalled) dep:
-      // tsc won't resolve it at compile time; it loads only if the fallback runs.
-      const mod = '@ai-sdk/openai';
-      const { createOpenAI } = (await import(mod)) as {
-        createOpenAI: (cfg: { apiKey: string }) => (model: string) => LanguageModel;
-      };
-      const openai = createOpenAI({ apiKey: fb });
-      cached = openai(process.env.FALLBACK_OPENAI_MODEL || 'gpt-4o-mini');
-      return cached;
-    } catch {
-      throw new Error(
-        'FALLBACK_OPENAI_API_KEY is set but @ai-sdk/openai is not installed. ' +
-          'Run: pnpm --filter @compation/agent add @ai-sdk/openai',
-      );
-    }
-  }
-
   throw new Error(
-    'No LLM configured. Set AZURE_OPENAI_RESOURCE_NAME, AZURE_OPENAI_API_KEY, ' +
-      'AZURE_OPENAI_DEPLOYMENT_NAME in .env (see .env.example), or set FALLBACK_OPENAI_API_KEY for dev.',
+    'Azure OpenAI not configured. Set AZURE_OPENAI_RESOURCE_NAME, AZURE_OPENAI_API_KEY, ' +
+      'AZURE_OPENAI_DEPLOYMENT_NAME in .env (see .env.example).',
   );
 }
 

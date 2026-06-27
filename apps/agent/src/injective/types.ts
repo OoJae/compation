@@ -2,7 +2,7 @@
  * Execution-layer types. The executor is the ONLY place chain I/O and key
  * signing happen; everything above it works in human decimals.
  */
-import type { OrderbookDepth } from '../risk/index.js';
+import type { OrderbookDepth } from '../risk/index';
 
 /** Injective derivative order type: 1 = BUY (long), 2 = SELL (short/close-long). */
 export type OrderTypeCode = 1 | 2;

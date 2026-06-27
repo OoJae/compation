@@ -4,7 +4,7 @@ import {
   computeHedgeSchema,
   placeHedgeSchema,
   summarizeSchema,
-} from './tools.js';
+} from './tools';
 
 /** Words that would let the model inject a position size — must NOT appear as inputs. */
 const FORBIDDEN = ['size', 'notional', 'margin', 'quantity', 'contracts'];

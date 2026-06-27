@@ -7,7 +7,7 @@ import {
   humanMarginToChain,
   chainPriceToHuman,
   buildQuantizedOrder,
-} from './scaling.js';
+} from './scaling';
 
 describe('quantizeDown', () => {
   it('rounds down to the tick', () => {

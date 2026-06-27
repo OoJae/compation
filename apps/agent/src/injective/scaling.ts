@@ -12,7 +12,7 @@
  *    rounded UP (the chain rejects when price × qty / leverage > margin).
  */
 import Decimal from 'decimal.js';
-import type { OrderTypeCode, QuantizedOrder } from './types.js';
+import type { OrderTypeCode, QuantizedOrder } from './types';
 
 /** Quantize a value DOWN to the nearest multiple of `tick` (float-artifact safe). */
 export function quantizeDown(value: Decimal, tick: Decimal): Decimal {

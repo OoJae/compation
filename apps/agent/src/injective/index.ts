@@ -1,15 +1,15 @@
 /** Execution layer public surface + executor factory. */
-export * from './types.js';
-export * from './scaling.js';
-export * from './adapters.js';
-export { FakeExecutor } from './fake-executor.js';
-export { SdkExecutor } from './sdk-executor.js';
-export { McpExecutor } from './mcp-executor.js';
+export * from './types';
+export * from './scaling';
+export * from './adapters';
+export { FakeExecutor } from './fake-executor';
+export { SdkExecutor } from './sdk-executor';
+export { McpExecutor } from './mcp-executor';
 
-import type { InjectiveExecutor } from './types.js';
-import { FakeExecutor } from './fake-executor.js';
-import { SdkExecutor } from './sdk-executor.js';
-import { McpExecutor } from './mcp-executor.js';
+import type { InjectiveExecutor } from './types';
+import { FakeExecutor } from './fake-executor';
+import { SdkExecutor } from './sdk-executor';
+import { McpExecutor } from './mcp-executor';
 
 /** Select the execution backend by the EXECUTOR env var (default: fake). */
 export function createExecutor(env: NodeJS.ProcessEnv = process.env): InjectiveExecutor {

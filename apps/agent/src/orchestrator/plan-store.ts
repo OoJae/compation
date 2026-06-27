@@ -1,6 +1,6 @@
 /** Server-side store for computed plans. place_hedge references a plan by id, never by raw numbers. */
-import type { HedgeIntent } from '../risk/index.js';
-import type { ProjectionResult } from './projection.js';
+import type { HedgeIntent } from '../risk/index';
+import type { ProjectionResult } from './projection';
 
 export interface StoredPlan {
   planId: string;

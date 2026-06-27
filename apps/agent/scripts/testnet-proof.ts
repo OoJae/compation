@@ -6,7 +6,7 @@
  *
  * Run: pnpm --filter @compation/agent testnet:proof
  */
-import { loadEnv } from './_shared.js';
+import { loadEnv } from './_shared';
 loadEnv();
 
 import {

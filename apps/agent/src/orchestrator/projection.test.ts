@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import { getRoute } from '@compation/shared';
-import { projectHedge } from './projection.js';
-import { deepDepthAt, type InjectiveExecutor } from '../injective/index.js';
-import type { OrderbookDepth } from '../risk/index.js';
-import type { HedgeIntent, AccountState } from '../risk/index.js';
+import { projectHedge } from './projection';
+import { deepDepthAt, type InjectiveExecutor } from '../injective/index';
+import type { OrderbookDepth } from '../risk/index';
+import type { HedgeIntent, AccountState } from '../risk/index';
 
 /** Controllable executor for projection tests (reads only). */
 class StubExec implements InjectiveExecutor {

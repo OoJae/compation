@@ -2,12 +2,12 @@
  * Verify the runtime LLM is live AND can call tools (the orchestrator depends
  * on tool-calling). Run: pnpm --filter @compation/agent azure:smoke
  */
-import { loadEnv } from './_shared.js';
+import { loadEnv } from './_shared';
 loadEnv();
 
 import { generateText, tool, stepCountIs } from 'ai';
 import { z } from 'zod';
-import { getModel, modelInfo } from '../src/llm/provider.js';
+import { getModel, modelInfo } from '../src/llm/provider';
 
 async function main(): Promise<void> {
   console.log(`Model: ${modelInfo()}`);

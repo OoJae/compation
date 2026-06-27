@@ -16,8 +16,8 @@
  */
 
 import { HOURS_PER_MONTH } from '@compation/shared';
-import { roundDownToStep, roundUpToStep } from './math.js';
-import { HedgeInputError, PlanError } from './errors.js';
+import { roundDownToStep, roundUpToStep } from './math';
+import { HedgeInputError, PlanError } from './errors';
 import type {
   AccountState,
   FundingCarryEstimate,
@@ -28,7 +28,7 @@ import type {
   PlanWarning,
   SlippageEstimate,
   ValidationResult,
-} from './types.js';
+} from './types';
 
 const EPS = 1e-9;
 

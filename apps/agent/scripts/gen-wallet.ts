@@ -12,7 +12,7 @@
 import { PrivateKey } from '@injectivelabs/sdk-ts';
 import { readFileSync, writeFileSync, existsSync, chmodSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { REPO_ROOT } from './_shared.js';
+import { REPO_ROOT } from './_shared';
 
 const ENV_PATH = resolve(REPO_ROOT, '.env');
 const EXAMPLE_PATH = resolve(REPO_ROOT, '.env.example');

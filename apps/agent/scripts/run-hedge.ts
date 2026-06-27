@@ -6,13 +6,13 @@
  *   pnpm --filter @compation/agent hedge                       # fake, default prompt
  *   EXECUTOR=sdk COMPATION_ROUTE=dev pnpm --filter @compation/agent hedge "I spend $30/month on H100s, hedge most of it" --close
  */
-import { loadEnv } from './_shared.js';
+import { loadEnv } from './_shared';
 loadEnv();
 
 import { getRoute } from '@compation/shared';
-import { getModel, modelInfo } from '../src/llm/provider.js';
-import { createExecutor } from '../src/injective/index.js';
-import { runHedgeTurn, InMemoryTrail } from '../src/orchestrator/index.js';
+import { getModel, modelInfo } from '../src/llm/provider';
+import { createExecutor } from '../src/injective/index';
+import { runHedgeTurn, InMemoryTrail } from '../src/orchestrator/index';
 
 const DEFAULT_PROMPT = 'I spend about $40,000/month renting H100 GPUs for my AI startup — hedge most of it.';
 

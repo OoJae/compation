@@ -20,8 +20,8 @@ import {
   type HedgePlan,
   type ValidationResult,
   type AccountState,
-} from '../risk/index.js';
-import { toMarketParams, deepDepthAt, type InjectiveExecutor } from '../injective/index.js';
+} from '../risk/index';
+import { toMarketParams, deepDepthAt, type InjectiveExecutor } from '../injective/index';
 
 export interface ProjectionResult {
   indexKey: string;

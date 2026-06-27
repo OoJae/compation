@@ -6,11 +6,11 @@
 import { tool, type ToolSet } from 'ai';
 import { z } from 'zod';
 import { getMarketProfile, type HedgeRoute } from '@compation/shared';
-import type { HedgeIntent } from '../risk/index.js';
-import { buildQuantizedOrder, worstFillPrice, toAccountState, type InjectiveExecutor } from '../injective/index.js';
-import { projectHedge, type ProjectionResult } from './projection.js';
-import { PlanStore } from './plan-store.js';
-import type { Trail } from './trail.js';
+import type { HedgeIntent } from '../risk/index';
+import { buildQuantizedOrder, worstFillPrice, toAccountState, type InjectiveExecutor } from '../injective/index';
+import { projectHedge, type ProjectionResult } from './projection';
+import { PlanStore } from './plan-store';
+import type { Trail } from './trail';
 
 // --- schemas (exported for the structural size-proof test) ---
 export const assessExposureSchema = z.object({

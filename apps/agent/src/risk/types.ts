@@ -1,4 +1,4 @@
-import type { PlanError } from './errors.js';
+import type { PlanError } from './errors';
 
 /** Live market microstructure the engine needs. All values in human decimals. */
 export interface MarketParams {

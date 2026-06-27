@@ -21,7 +21,7 @@
  * already human (contract count). maxLeverage ≈ 1 / initialMarginRatio.
  */
 
-import type { NetworkId } from './networks.js';
+import type { NetworkId } from './networks';
 
 export type MarketStatus = 'active' | 'paused' | 'suspended' | 'expired' | 'demolished';
 export type MarketRole = 'index' | 'venue';

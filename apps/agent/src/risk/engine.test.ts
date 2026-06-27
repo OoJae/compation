@@ -4,7 +4,7 @@ import {
   roundDownToStep,
   roundUpToStep,
   roundToStep,
-} from './math.js';
+} from './math';
 import {
   deriveExposureHours,
   computeHedgeSize,
@@ -17,15 +17,15 @@ import {
   buildHedgePlan,
   validatePlan,
   assessHedge,
-} from './engine.js';
-import { HedgeInputError } from './errors.js';
+} from './engine';
+import { HedgeInputError } from './errors';
 import type {
   AccountState,
   HedgeIntent,
   HedgePlan,
   MarketParams,
   OrderbookDepth,
-} from './types.js';
+} from './types';
 
 // --- fixtures -------------------------------------------------------------
 

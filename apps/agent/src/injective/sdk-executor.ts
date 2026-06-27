@@ -15,9 +15,9 @@ import {
 } from '@injectivelabs/sdk-ts';
 import { getNetworkEndpoints, Network } from '@injectivelabs/networks';
 import { getMarketProfile, explorerTxUrl, type MarketProfile, type NetworkId } from '@compation/shared';
-import type { OrderbookDepth } from '../risk/index.js';
-import { chainSellsToDepth } from './adapters.js';
-import { humanPriceToChain, humanQtyToChain } from './scaling.js';
+import type { OrderbookDepth } from '../risk/index';
+import { chainSellsToDepth } from './adapters';
+import { humanPriceToChain, humanQtyToChain } from './scaling';
 import {
   MainnetWriteBlocked,
   type InjectiveExecutor,
@@ -26,7 +26,7 @@ import {
   type OpenResult,
   type CloseResult,
   type QuantizedOrder,
-} from './types.js';
+} from './types';
 
 interface ReadClients {
   deriv: IndexerGrpcDerivativesApi;

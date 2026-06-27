@@ -4,8 +4,8 @@
  * hashes. No network, no keys.
  */
 import { getMarketProfile, explorerTxUrl } from '@compation/shared';
-import type { OrderbookDepth } from '../risk/index.js';
-import { deepDepthAt } from './adapters.js';
+import type { OrderbookDepth } from '../risk/index';
+import { deepDepthAt } from './adapters';
 import type {
   InjectiveExecutor,
   VenueQuote,
@@ -13,7 +13,7 @@ import type {
   OpenResult,
   CloseResult,
   QuantizedOrder,
-} from './types.js';
+} from './types';
 
 const CANNED_PRICES: Record<string, number> = {
   H100: 2.85,

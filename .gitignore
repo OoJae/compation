@@ -8,6 +8,11 @@ dist/
 out/
 build/
 *.tsbuildinfo
+next-env.d.ts
+
+# test / browser artifacts
+.playwright-mcp/
+compation-demo.png
 
 # env / secrets
 .env

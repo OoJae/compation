@@ -2,7 +2,7 @@
  * MCP-server execution path (flag-gated, deferred). Stub for Phase 1 — the
  * default/demoed path is SdkExecutor. Filled in a later increment.
  */
-import type { OrderbookDepth } from '../risk/index.js';
+import type { OrderbookDepth } from '../risk/index';
 import {
   NotImplemented,
   type InjectiveExecutor,
@@ -11,7 +11,7 @@ import {
   type OpenResult,
   type CloseResult,
   type QuantizedOrder,
-} from './types.js';
+} from './types';
 
 export class McpExecutor implements InjectiveExecutor {
   readonly kind = 'mcp' as const;
