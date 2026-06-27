@@ -7,12 +7,19 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
-    "spike:read": "tsx scripts/read-markets.ts"
+    "spike:read": "tsx scripts/read-markets.ts",
+    "wallet:gen": "tsx scripts/gen-wallet.ts",
+    "wallet:status": "tsx scripts/wallet-status.ts",
+    "azure:smoke": "tsx scripts/azure-smoke.ts"
   },
   "dependencies": {
+    "@ai-sdk/azure": "^3.0.74",
     "@compation/shared": "workspace:*",
     "@injectivelabs/networks": "^1.19.12",
-    "@injectivelabs/sdk-ts": "^1.19.12"
+    "@injectivelabs/sdk-ts": "^1.19.12",
+    "ai": "^7.0.0",
+    "dotenv": "^16.4.7",
+    "zod": "^3.25.0"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
