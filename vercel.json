@@ -1,0 +1,6 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
+  "buildCommand": "pnpm --filter @compation/agent exec prisma generate && pnpm --filter @compation/web build",
+  "outputDirectory": "apps/web/.next"
+}

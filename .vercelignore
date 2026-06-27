@@ -1,0 +1,11 @@
+# Never ship secrets or local state to the build (defense in depth — these are
+# also gitignored). Env comes from Vercel project settings, not files.
+.env
+.env.*
+!.env.example
+*.db
+**/*.db
+.wallet-backup.txt
+compation-*.png
+.playwright-mcp/
+infra/mcp
