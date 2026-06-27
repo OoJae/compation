@@ -12,7 +12,7 @@ import {
   type UIMessage,
 } from 'ai';
 import type { HedgeRoute } from '@compation/shared';
-import type { InjectiveExecutor } from '../injective/index';
+import { friendlyTurnError, type InjectiveExecutor } from '../injective/index';
 import { makeTools, type TurnContext, type OpenedPosition } from './tools';
 import { PlanStore } from './plan-store';
 import { SYSTEM_PROMPT } from './system-prompt';
@@ -89,5 +89,7 @@ export async function streamHedgeTurn(opts: StreamHedgeOptions): Promise<Respons
     },
   });
 
-  return result.toUIMessageStreamResponse({ sendReasoning: true });
+  // Surface any in-stream failure (model/tool/RPC) as a friendly line, never a
+  // raw stack trace; useChat exposes this as `error.message`.
+  return result.toUIMessageStreamResponse({ sendReasoning: true, onError: friendlyTurnError });
 }

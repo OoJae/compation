@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { usd, shortHash } from './format';
+import { CopyButton } from './Copy';
 
 interface X402Receipt {
   ok: boolean;
@@ -72,15 +73,18 @@ export function X402Panel() {
             </div>
           </div>
           {receipt.txHash && (
-            <a
-              href={receipt.explorerUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-lg border border-sky-800/50 bg-sky-900/20 px-3 py-1.5 text-xs text-sky-200 hover:bg-sky-900/40"
-            >
-              <span className="font-mono">{shortHash(receipt.txHash)}</span>
-              <span className="text-sky-400">view settlement ↗</span>
-            </a>
+            <div className="flex items-center gap-2">
+              <a
+                href={receipt.explorerUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-lg border border-sky-800/50 bg-sky-900/20 px-3 py-1.5 text-xs text-sky-200 hover:bg-sky-900/40"
+              >
+                <span className="font-mono">{shortHash(receipt.txHash)}</span>
+                <span className="text-sky-400">view settlement ↗</span>
+              </a>
+              <CopyButton value={receipt.txHash} />
+            </div>
           )}
           <button onClick={() => { setState('idle'); setReceipt(null); }} className="text-[11px] text-neutral-500 hover:text-neutral-300">
             pay again

@@ -1,5 +1,6 @@
 import type { ComputeOutput, PlaceOutput } from './types';
 import { usd, num, pct, shortHash } from './format';
+import { CopyButton } from './Copy';
 
 function Row({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
   return (
@@ -12,16 +13,23 @@ function Row({ label, value, accent }: { label: string; value: string; accent?: 
 
 export function HedgeConfirmation({ compute, place }: { compute: ComputeOutput; place?: PlaceOutput }) {
   if (compute.ok === false) {
+    const errs = compute.errors ?? [];
     return (
       <div className="rounded-xl border border-red-900/50 bg-red-950/20 p-4">
         <div className="text-sm font-medium text-red-300">Hedge not placed</div>
-        <ul className="mt-2 space-y-1 text-xs text-red-200/80">
-          {compute.errors.map((e, i) => (
-            <li key={i}>
-              <span className="font-mono text-red-300">{e.code}</span> — {e.message}
-            </li>
-          ))}
-        </ul>
+        {errs.length > 0 ? (
+          <ul className="mt-2 space-y-1 text-xs text-red-200/80">
+            {errs.map((e, i) => (
+              <li key={i}>
+                <span className="font-mono text-red-300">{e.code}</span> — {e.message}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="mt-2 text-xs text-red-200/80">
+            {compute.error ?? 'The hedge could not be computed right now. Please retry.'}
+          </p>
+        )}
       </div>
     );
   }
@@ -84,15 +92,18 @@ export function HedgeConfirmation({ compute, place }: { compute: ComputeOutput; 
               long {num(place.size)} · {usd(place.notional)}
             </span>
           </div>
-          <a
-            href={place.explorerUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="mt-2 inline-flex items-center gap-2 rounded-lg border border-emerald-800/50 bg-emerald-900/20 px-3 py-1.5 text-xs text-emerald-200 hover:bg-emerald-900/40"
-          >
-            <span className="font-mono">{shortHash(place.txHash)}</span>
-            <span className="text-emerald-400">view on explorer ↗</span>
-          </a>
+          <div className="mt-2 flex items-center gap-2">
+            <a
+              href={place.explorerUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 rounded-lg border border-emerald-800/50 bg-emerald-900/20 px-3 py-1.5 text-xs text-emerald-200 hover:bg-emerald-900/40"
+            >
+              <span className="font-mono">{shortHash(place.txHash)}</span>
+              <span className="text-emerald-400">view on explorer ↗</span>
+            </a>
+            <CopyButton value={place.txHash} />
+          </div>
         </div>
       )}
 

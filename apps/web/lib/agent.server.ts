@@ -17,6 +17,7 @@ import {
   getIdentity,
   PrismaTrail,
   streamHedgeTurn,
+  friendlyTurnError,
   type X402Receipt,
 } from '@compation/agent';
 import { getRoute, getMarketProfile } from '@compation/shared';
@@ -60,17 +61,25 @@ export async function runX402(): Promise<X402Receipt> {
 }
 
 export async function runChat(messages: UIMessage[]): Promise<Response> {
-  const model = await getModel();
-  const executor = createExecutor();
-  const route = activeRoute();
-  const sessionId = await createSession(route.key);
-  const trail = new PrismaTrail(sessionId);
-  return streamHedgeTurn({
-    messages,
-    model,
-    executor,
-    route,
-    trail,
-    onPosition: (p) => void recordPosition(sessionId, p),
-  });
+  try {
+    const model = await getModel();
+    const executor = createExecutor();
+    const route = activeRoute();
+    const sessionId = await createSession(route.key);
+    const trail = new PrismaTrail(sessionId);
+    return await streamHedgeTurn({
+      messages,
+      model,
+      executor,
+      route,
+      trail,
+      onPosition: (p) => void recordPosition(sessionId, p),
+    });
+  } catch (e) {
+    // Setup failure (e.g. Azure unconfigured / wallet missing) before the stream
+    // starts — surface a friendly line, never a stack trace. useChat reads the
+    // body text as error.message.
+    console.error('[compation] runChat failed:', e);
+    return new Response(friendlyTurnError(e), { status: 500, headers: { 'content-type': 'text/plain' } });
+  }
 }

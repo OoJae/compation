@@ -7,7 +7,13 @@ import { tool, type ToolSet } from 'ai';
 import { z } from 'zod';
 import { getMarketProfile, type HedgeRoute } from '@compation/shared';
 import type { HedgeIntent } from '../risk/index';
-import { buildQuantizedOrder, worstFillPrice, toAccountState, type InjectiveExecutor } from '../injective/index';
+import {
+  buildQuantizedOrder,
+  worstFillPrice,
+  toAccountState,
+  normalizeExecutionError,
+  type InjectiveExecutor,
+} from '../injective/index';
 import { projectHedge, type ProjectionResult } from './projection';
 import { PlanStore } from './plan-store';
 import type { Trail } from './trail';
@@ -138,13 +144,19 @@ export function makeTools(deps: {
         trail.record({ kind: 'error', toolName: 'compute_hedge', content: error });
         return { ok: false, error };
       }
-      const balance = await executor.getBankBalance(ctx.route.primaryVenueKey);
-      const account = toAccountState(balance, reserveFor(balance));
-      const projection = await projectHedge(ctx.intent, ctx.route, executor, account);
-      const stored = planStore.put(ctx.intent, projection);
-      const out = summarizeProjection(stored.planId, projection, balance);
-      trail.record({ kind: 'tool_result', toolName: 'compute_hedge', content: out });
-      return out;
+      try {
+        const balance = await executor.getBankBalance(ctx.route.primaryVenueKey);
+        const account = toAccountState(balance, reserveFor(balance));
+        const projection = await projectHedge(ctx.intent, ctx.route, executor, account);
+        const stored = planStore.put(ctx.intent, projection);
+        const out = summarizeProjection(stored.planId, projection, balance);
+        trail.record({ kind: 'tool_result', toolName: 'compute_hedge', content: out });
+        return out;
+      } catch (e) {
+        const fe = normalizeExecutionError(e);
+        trail.record({ kind: 'error', toolName: 'compute_hedge', content: fe });
+        return { ok: false, error: fe.message, code: fe.code };
+      }
     },
   });
 
@@ -159,43 +171,49 @@ export function makeTools(deps: {
         trail.record({ kind: 'error', toolName: 'place_hedge', content: error });
         return { ok: false, error };
       }
-      // Drift guard: re-fetch live data and re-validate before broadcasting.
-      const balance = await executor.getBankBalance(ctx.route.primaryVenueKey);
-      const account = toAccountState(balance, reserveFor(balance));
-      const fresh = await projectHedge(ctx.intent, ctx.route, executor, account);
-      if (!fresh.venue.ok || !fresh.venue.plan) {
-        const codes = fresh.venue.errors.map((e) => e.code);
-        const error = `Plan no longer valid (market moved): ${codes.join(', ')}`;
-        trail.record({ kind: 'error', toolName: 'place_hedge', content: error });
-        return { ok: false, error, errors: fresh.venue.errors.map((e) => ({ code: e.code, message: e.message })) };
+      try {
+        // Drift guard: re-fetch live data and re-validate before broadcasting.
+        const balance = await executor.getBankBalance(ctx.route.primaryVenueKey);
+        const account = toAccountState(balance, reserveFor(balance));
+        const fresh = await projectHedge(ctx.intent, ctx.route, executor, account);
+        if (!fresh.venue.ok || !fresh.venue.plan) {
+          const codes = fresh.venue.errors.map((e) => e.code);
+          const error = `Plan no longer valid (market moved): ${codes.join(', ')}`;
+          trail.record({ kind: 'error', toolName: 'place_hedge', content: error });
+          return { ok: false, error, errors: fresh.venue.errors.map((e) => ({ code: e.code, message: e.message })) };
+        }
+        const venuePlan = fresh.venue.plan;
+        const venueProfile = getMarketProfile(fresh.venueKey);
+        const depth = await executor.getOrderbookDepth(fresh.venueKey);
+        const execPrice = worstFillPrice(depth.asks, venuePlan.size) ?? venuePlan.entryPrice;
+        const order = buildQuantizedOrder({
+          quoteDecimals: venueProfile.quoteDecimals,
+          tickSize: venueProfile.tickSize,
+          minQuantityTick: venueProfile.minQuantityTick,
+          execPrice,
+          quantity: venuePlan.size,
+          leverage: venuePlan.leverage,
+          maxSlippage: ctx.intent.maxSlippage,
+        });
+        const res = await executor.openHedge(fresh.venueKey, order);
+        ctx.result = {
+          txHash: res.txHash,
+          explorerUrl: res.explorerUrl,
+          venueKey: res.venueKey,
+          side: 'long',
+          size: order.humanQuantity,
+          notional: venuePlan.notional,
+          margin: order.humanMargin,
+        };
+        deps.onPosition?.({ ...ctx.result });
+        const out = { ok: true, ...ctx.result };
+        trail.record({ kind: 'tool_result', toolName: 'place_hedge', content: out });
+        return out;
+      } catch (e) {
+        const fe = normalizeExecutionError(e);
+        trail.record({ kind: 'error', toolName: 'place_hedge', content: fe });
+        return { ok: false, error: fe.message, code: fe.code };
       }
-      const venuePlan = fresh.venue.plan;
-      const venueProfile = getMarketProfile(fresh.venueKey);
-      const depth = await executor.getOrderbookDepth(fresh.venueKey);
-      const execPrice = worstFillPrice(depth.asks, venuePlan.size) ?? venuePlan.entryPrice;
-      const order = buildQuantizedOrder({
-        quoteDecimals: venueProfile.quoteDecimals,
-        tickSize: venueProfile.tickSize,
-        minQuantityTick: venueProfile.minQuantityTick,
-        execPrice,
-        quantity: venuePlan.size,
-        leverage: venuePlan.leverage,
-        maxSlippage: ctx.intent.maxSlippage,
-      });
-      const res = await executor.openHedge(fresh.venueKey, order);
-      ctx.result = {
-        txHash: res.txHash,
-        explorerUrl: res.explorerUrl,
-        venueKey: res.venueKey,
-        side: 'long',
-        size: order.humanQuantity,
-        notional: venuePlan.notional,
-        margin: order.humanMargin,
-      };
-      deps.onPosition?.({ ...ctx.result });
-      const out = { ok: true, ...ctx.result };
-      trail.record({ kind: 'tool_result', toolName: 'place_hedge', content: out });
-      return out;
     },
   });
 

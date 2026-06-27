@@ -51,8 +51,11 @@ export interface ComputeOutput {
     estMonthlyCarry: number;
   } | null;
   bankUsdc: number;
-  errors: { code: string; message: string }[];
+  errors?: { code: string; message: string }[];
   warnings: { code: string; message: string }[];
+  /** Present on a failed compute (validation or a normalized chain error). */
+  error?: string;
+  code?: string;
 }
 
 export interface PlaceOutput {

@@ -22,6 +22,7 @@
     "azure:smoke": "tsx scripts/azure-smoke.ts",
     "hedge": "tsx scripts/run-hedge.ts",
     "position:close": "tsx scripts/close-position.ts",
+    "demo:reset": "tsx scripts/demo-reset.ts",
     "x402:pay": "tsx scripts/x402-pay.ts",
     "erc8004:register": "tsx scripts/erc8004-register.ts"
   },

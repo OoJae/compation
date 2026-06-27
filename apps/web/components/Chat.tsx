@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type ReactNode } from 'react';
+import { useRef, useState, type ReactNode } from 'react';
 import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport } from 'ai';
 import type { AgentMeta, AgentIdentity, AnyPart, ComputeOutput, PlaceOutput } from './types';
@@ -25,7 +25,14 @@ export function Chat({ meta, identity }: { meta: AgentMeta; identity: AgentIdent
     transport: new DefaultChatTransport({ api: '/api/chat' }),
   });
   const [input, setInput] = useState('');
+  const taRef = useRef<HTMLTextAreaElement>(null);
   const busy = status === 'submitted' || status === 'streaming';
+
+  function autosize(el: HTMLTextAreaElement | null) {
+    if (!el) return;
+    el.style.height = 'auto';
+    el.style.height = `${Math.min(el.scrollHeight, 140)}px`;
+  }
 
   const lastAssistant = [...messages].reverse().find((m) => m.role === 'assistant');
   const toolParts = ((lastAssistant?.parts ?? []) as unknown as AnyPart[]).filter(
@@ -39,6 +46,7 @@ export function Chat({ meta, identity }: { meta: AgentMeta; identity: AgentIdent
     if (!t || busy) return;
     sendMessage({ text: t });
     setInput('');
+    if (taRef.current) taRef.current.style.height = 'auto';
   }
 
   return (
@@ -69,22 +77,23 @@ export function Chat({ meta, identity }: { meta: AgentMeta; identity: AgentIdent
               </div>
             );
           })}
-          {busy && !lastAssistant && <div className="animate-pulse text-sm text-neutral-500">Reasoning…</div>}
+          {busy && !lastAssistant && <Thinking />}
         </div>
 
         <form onSubmit={(ev) => { ev.preventDefault(); submit(input); }} className="mt-4 flex items-end gap-2">
           <textarea
+            ref={taRef}
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={(e) => { setInput(e.target.value); autosize(e.target); }}
             onKeyDown={(e) => {
               if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
                 submit(input);
               }
             }}
-            rows={2}
+            rows={1}
             placeholder="Describe your H100 compute spend…"
-            className="min-h-[46px] flex-1 resize-none rounded-xl border border-neutral-800 bg-neutral-900/60 px-3 py-2.5 text-sm text-neutral-100 placeholder:text-neutral-600 focus:border-emerald-700/60 focus:outline-none"
+            className="max-h-[140px] min-h-[46px] flex-1 resize-none rounded-xl border border-neutral-800 bg-neutral-900/60 px-3 py-2.5 text-sm text-neutral-100 placeholder:text-neutral-600 focus:border-emerald-700/60 focus:outline-none"
           />
           <button
             type="submit"
@@ -94,7 +103,11 @@ export function Chat({ meta, identity }: { meta: AgentMeta; identity: AgentIdent
             {busy ? '…' : 'Hedge'}
           </button>
         </form>
-        {error && <div className="mt-2 text-xs text-red-400">{error.message}</div>}
+        {error && (
+          <div className="mt-3 rounded-xl border border-red-900/50 bg-red-950/20 px-3 py-2.5 text-xs text-red-200">
+            {error.message || 'Something interrupted the agent. Please try again.'}
+          </div>
+        )}
       </section>
 
       {/* RIGHT — live agent state */}
@@ -113,6 +126,23 @@ export function Chat({ meta, identity }: { meta: AgentMeta; identity: AgentIdent
         {messages.length === 0 && <SidebarHint />}
       </aside>
     </main>
+  );
+}
+
+function Thinking() {
+  return (
+    <div className="flex items-center gap-2 text-sm text-neutral-500">
+      <span>Reasoning</span>
+      <span className="inline-flex gap-1">
+        {['0ms', '150ms', '300ms'].map((d) => (
+          <span
+            key={d}
+            className="inline-block h-1.5 w-1.5 animate-bounce rounded-full bg-emerald-500/70"
+            style={{ animationDelay: d }}
+          />
+        ))}
+      </span>
+    </div>
   );
 }
 

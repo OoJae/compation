@@ -1,13 +1,29 @@
 import type { AgentIdentity } from './types';
+import { CopyButton } from './Copy';
 
 const short = (a?: string) => (a ? `${a.slice(0, 10)}…${a.slice(-6)}` : '—');
 
-function Row({ label, value, mono, tone }: { label: string; value: string; mono?: boolean; tone?: 'emerald' }) {
+function Row({
+  label,
+  value,
+  mono,
+  tone,
+  copyValue,
+}: {
+  label: string;
+  value: string;
+  mono?: boolean;
+  tone?: 'emerald';
+  copyValue?: string;
+}) {
   return (
     <div className="flex items-baseline justify-between gap-3">
       <span className="text-neutral-500">{label}</span>
-      <span className={`${mono ? 'font-mono' : ''} ${tone === 'emerald' ? 'text-emerald-300' : 'text-neutral-200'} text-right`}>
-        {value}
+      <span className="flex items-baseline gap-2 text-right">
+        <span className={`${mono ? 'font-mono' : ''} ${tone === 'emerald' ? 'text-emerald-300' : 'text-neutral-200'}`}>
+          {value}
+        </span>
+        {copyValue && <CopyButton value={copyValue} />}
       </span>
     </div>
   );
@@ -21,8 +37,8 @@ export function IdentityBadge({ identity }: { identity: AgentIdentity }) {
         <span className="text-[11px] text-neutral-500">a registered economic actor</span>
       </div>
       <div className="space-y-1.5 text-xs">
-        <Row label="agent (inj)" value={short(identity.injAddress)} mono />
-        <Row label="agent (evm)" value={short(identity.evmAddress)} mono />
+        <Row label="agent (inj)" value={short(identity.injAddress)} mono copyValue={identity.injAddress} />
+        <Row label="agent (evm)" value={short(identity.evmAddress)} mono copyValue={identity.evmAddress} />
         <Row label="fee recipient" value="earns protocol fee rebates" tone="emerald" />
         {identity.erc8004TokenId ? (
           <Row label="ERC-8004" value={`registered · #${identity.erc8004TokenId}`} tone="emerald" />

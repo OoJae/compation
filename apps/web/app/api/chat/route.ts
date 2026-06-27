@@ -6,6 +6,11 @@ export const runtime = 'nodejs';
 export const maxDuration = 60;
 
 export async function POST(req: Request): Promise<Response> {
-  const { messages } = (await req.json()) as { messages: UIMessage[] };
-  return runChat(messages);
+  try {
+    const { messages } = (await req.json()) as { messages: UIMessage[] };
+    return await runChat(messages);
+  } catch (e) {
+    console.error('[compation] /api/chat failed:', e);
+    return new Response('Something interrupted the agent. Please try again.', { status: 500 });
+  }
 }
