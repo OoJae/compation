@@ -36,7 +36,7 @@
 > GPU rental prices — especially NVIDIA H100 — are volatile, opaque, and the dominant cost for anyone training or serving AI. A startup that budgets $40,000/month for H100s can watch that balloon when demand spikes, with historically no way to hedge it. Injective just put the first on-chain NVIDIA H100 rental-rate market live (Squaretower / Stork oracle), so compute is becoming an asset class. Compation is the autonomous agent that makes that market usable: natural-language intake, a deterministic risk engine that sizes the hedge, real signed execution on Injective, plain-language confirmations, a transparent decision trail, and a what-if simulator. *Azure brains, Injective hands, an on-chain wallet that pays its own way.*
 
 **GitHub link**
-> `<GITHUB_REPO_URL>`
+> https://github.com/OoJae/compation
 
 **Demo video link**
 > `<VIDEO_LINK>`
