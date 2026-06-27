@@ -6,6 +6,7 @@ import { DefaultChatTransport } from 'ai';
 import type { AgentMeta, AnyPart, ComputeOutput, PlaceOutput } from './types';
 import { DecisionTrail } from './DecisionTrail';
 import { HedgeConfirmation } from './HedgeConfirmation';
+import { HedgeDashboard } from './HedgeDashboard';
 import { ProxyBadge } from './ProxyBadge';
 
 const EXAMPLE = 'I spend about $40,000/month renting H100 GPUs for my AI startup — hedge most of it.';
@@ -99,6 +100,7 @@ export function Chat({ meta }: { meta: AgentMeta }) {
         <ProxyBadge meta={meta} liveVenue={compute?.venueTicker} />
         <DecisionTrail toolParts={toolParts} />
         {compute && <HedgeConfirmation compute={compute} place={place} />}
+        {compute?.ok && <HedgeDashboard compute={compute} />}
         {!compute && messages.length > 0 && busy && (
           <div className="rounded-xl border border-neutral-800 bg-neutral-900/40 p-4 text-xs text-neutral-500">
             Reading the live H100 index and computing the hedge…

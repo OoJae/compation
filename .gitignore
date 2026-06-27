@@ -12,7 +12,7 @@ next-env.d.ts
 
 # test / browser artifacts
 .playwright-mcp/
-compation-demo.png
+compation-*.png
 
 # env / secrets
 .env

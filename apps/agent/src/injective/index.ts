@@ -2,6 +2,7 @@
 export * from './types';
 export * from './scaling';
 export * from './adapters';
+export * from './read';
 export { FakeExecutor } from './fake-executor';
 export { SdkExecutor } from './sdk-executor';
 export { McpExecutor } from './mcp-executor';
