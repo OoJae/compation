@@ -1,0 +1,66 @@
+// Compation persistence — sessions, the decision trail, and opened positions.
+// SQLite for the hackathon; the path resolves relative to THIS file's dir.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Session {
+  id        String         @id @default(uuid())
+  route     String
+  createdAt DateTime       @default(now())
+  steps     DecisionStep[]
+  positions Position[]
+}
+
+model DecisionStep {
+  id        String   @id @default(uuid())
+  sessionId String
+  seq       Int
+  kind      String // reasoning | tool_call | tool_result | error | observation
+  toolName  String?
+  content   String // JSON-serialized
+  createdAt DateTime @default(now())
+  session   Session  @relation(fields: [sessionId], references: [id])
+
+  @@index([sessionId, seq])
+}
+
+model Position {
+  id          String    @id @default(uuid())
+  sessionId   String?
+  venueKey    String
+  side        String
+  size        Float
+  notional    Float
+  margin      Float
+  openTxHash  String
+  explorerUrl String
+  status      String    @default("open") // open | closed
+  openedAt    DateTime  @default(now())
+  closedAt    DateTime?
+  session     Session?  @relation(fields: [sessionId], references: [id])
+}
+
+// Phase 2 stubs (x402 receipts + ERC-8004 identity).
+model PaymentReceipt {
+  id        String   @id @default(uuid())
+  sessionId String?
+  kind      String
+  amount    Float
+  denom     String
+  txHash    String?
+  createdAt DateTime @default(now())
+}
+
+model IdentityRecord {
+  id             String   @id @default(uuid())
+  agentAddress   String
+  registrationTx String?
+  createdAt      DateTime @default(now())
+}

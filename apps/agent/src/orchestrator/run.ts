@@ -13,7 +13,7 @@ import {
 } from 'ai';
 import type { HedgeRoute } from '@compation/shared';
 import type { InjectiveExecutor } from '../injective/index';
-import { makeTools, type TurnContext } from './tools';
+import { makeTools, type TurnContext, type OpenedPosition } from './tools';
 import { PlanStore } from './plan-store';
 import { SYSTEM_PROMPT } from './system-prompt';
 import type { Trail } from './trail';
@@ -58,6 +58,7 @@ export interface StreamHedgeOptions {
   route: HedgeRoute;
   trail: Trail;
   maxSteps?: number;
+  onPosition?: (p: OpenedPosition) => void;
 }
 
 /**
@@ -69,7 +70,13 @@ export interface StreamHedgeOptions {
 export async function streamHedgeTurn(opts: StreamHedgeOptions): Promise<Response> {
   const ctx: TurnContext = { route: opts.route };
   const planStore = new PlanStore();
-  const tools = makeTools({ executor: opts.executor, trail: opts.trail, planStore, ctx });
+  const tools = makeTools({
+    executor: opts.executor,
+    trail: opts.trail,
+    planStore,
+    ctx,
+    onPosition: opts.onPosition,
+  });
 
   const result = streamText({
     model: opts.model,

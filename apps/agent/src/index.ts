@@ -3,3 +3,4 @@ export * from './risk/index';
 export * from './injective/index';
 export * from './orchestrator/index';
 export * from './llm/provider';
+export * from './db/index';

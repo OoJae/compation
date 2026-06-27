@@ -10,7 +10,9 @@ import {
   createExecutor,
   getModel,
   modelInfo,
-  InMemoryTrail,
+  createSession,
+  recordPosition,
+  PrismaTrail,
   streamHedgeTurn,
 } from '@compation/agent';
 import { getRoute, getMarketProfile } from '@compation/shared';
@@ -44,6 +46,14 @@ export async function runChat(messages: UIMessage[]): Promise<Response> {
   const model = await getModel();
   const executor = createExecutor();
   const route = activeRoute();
-  const trail = new InMemoryTrail();
-  return streamHedgeTurn({ messages, model, executor, route, trail });
+  const sessionId = await createSession(route.key);
+  const trail = new PrismaTrail(sessionId);
+  return streamHedgeTurn({
+    messages,
+    model,
+    executor,
+    route,
+    trail,
+    onPosition: (p) => void recordPosition(sessionId, p),
+  });
 }

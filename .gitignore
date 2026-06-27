@@ -21,8 +21,8 @@ compation-demo.png
 .wallet-backup.txt
 
 # database
-prisma/dev.db
-prisma/dev.db-journal
+**/*.db
+**/*.db-journal
 *.sqlite
 *.sqlite3
 

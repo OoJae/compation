@@ -80,11 +80,22 @@ function summarizeProjection(planId: string, p: ProjectionResult, bankUsdc: numb
   };
 }
 
+export interface OpenedPosition {
+  venueKey: string;
+  side: 'long';
+  size: number;
+  notional: number;
+  margin: number;
+  txHash: string;
+  explorerUrl: string;
+}
+
 export function makeTools(deps: {
   executor: InjectiveExecutor;
   trail: Trail;
   planStore: PlanStore;
   ctx: TurnContext;
+  onPosition?: (p: OpenedPosition) => void;
 }): ToolSet {
   const { executor, trail, planStore, ctx } = deps;
 
@@ -181,6 +192,7 @@ export function makeTools(deps: {
         notional: venuePlan.notional,
         margin: order.humanMargin,
       };
+      deps.onPosition?.({ ...ctx.result });
       const out = { ok: true, ...ctx.result };
       trail.record({ kind: 'tool_result', toolName: 'place_hedge', content: out });
       return out;
