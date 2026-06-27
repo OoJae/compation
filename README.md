@@ -4,6 +4,8 @@
 
 `testnet demo` · `Azure-powered` · `ERC-8004 #49` · `built on Injective`
 
+### ▶ Live demo: **[compation.vercel.app](https://compation.vercel.app)**  ·  [demo script](docs/05_demo_script.md)
+
 Compation turns a previously trader-only action — hedging the price of NVIDIA H100 GPU time — into a natural-language conversation. You tell it your exposure; it reasons about strategy with Azure OpenAI, sizes the position with a deterministic risk engine, and opens a **real, signed position on Injective**. Then it does something no demo does: it **pays for its own compute on-chain** via x402, and earns protocol fee rebates as a **registered ERC-8004 economic actor**. The architecture in one line: *Azure brains, Injective hands, an on-chain wallet that pays its own way.*
 
 > **Trust principle:** The language model reasons; a deterministic risk engine sizes. Compation never hallucinates a position size — every number on screen is computed and constraint-checked, and every decision is logged.
@@ -173,6 +175,7 @@ compation/
 
 ## Demo
 
+**▶ Live (hosted):** https://compation.vercel.app — runs real **testnet** execution (`EXECUTOR=sdk`); x402 settlement and the ERC-8004 #49 identity are real on-chain.
 **Demo video:** _<link to be added>_
 
 Step-by-step walkthrough: [`docs/05_demo_script.md`](docs/05_demo_script.md)
@@ -202,3 +205,4 @@ Compation is **non-custodial** — keys never touch the model. It is **tooling t
 - The **H100 perp is paused** for a USDT→USDC collateral migration, so the tradeable hedge uses the **NVDA/USDC proxy** while the real H100 index is still **read live** from the Stork oracle.
 - **Testnet order books are thin** — a close can occasionally fail to fill.
 - The demo runs **testnet-only by choice** for reliability; the mainnet write path exists and is **hard-gated** behind `ALLOW_MAINNET_WRITES=true`.
+- The **hosted demo** (`compation.vercel.app`) runs the **real testnet executor** from a minimally-funded agent wallet, so anyone can open a small testnet position — thin testnet books can make a fill lag. Persistence (Prisma/SQLite) is local-only; the hosted decision trail renders from the live stream.
