@@ -21,8 +21,8 @@ Do these in order, every time, before the lights come up:
    ```bash
    pnpm --filter @compation/web dev
    ```
-4. **Open** http://localhost:3000.
-5. **Confirm the header** shows **Azure OpenAI (`compation-gpt`, gpt-5.4-mini)** and **Injective testnet** — this is the Microsoft + Injective proof, on screen, the whole time.
+4. **Open** http://localhost:3000 — the **landing site**. Open with the hero, then click **Open demo →** to reach the agent at **/app** (or go straight to http://localhost:3000/app).
+5. **Confirm the app header** shows **Azure OpenAI (`compation-gpt`, gpt-5.4-mini)** and **Injective testnet** — this is the Microsoft + Injective proof, on screen, the whole time.
 6. **Have the recorded fallback video queued** and ready to cut to (see "If something fails").
 
 Sanity notes:

@@ -175,7 +175,7 @@ compation/
 
 ## Demo
 
-**▶ Live (hosted):** https://compation.vercel.app — runs real **testnet** execution (`EXECUTOR=sdk`); x402 settlement and the ERC-8004 #49 identity are real on-chain.
+**▶ Live (hosted):** **[compation.vercel.app](https://compation.vercel.app)** is the landing site; the working agent is one click away at **[/app](https://compation.vercel.app/app)** — real **testnet** execution (`EXECUTOR=sdk`); x402 settlement and the ERC-8004 #49 identity are real on-chain.
 **Demo video:** _<link to be added>_
 
 Step-by-step walkthrough: [`docs/05_demo_script.md`](docs/05_demo_script.md)

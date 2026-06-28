@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;500;700&family=Newsreader:ital,opsz,wght@1,18..32,400;1,18..32,500&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:#07080B}
+  ::selection{background:#34D399;color:#07080B}
+  @media(max-width:720px){[data-navlinks]{display:none!important}}
+  @media (prefers-reduced-motion: reduce){*{animation:none!important}html{scroll-behavior:auto}}
+</style>
+</helmet>
+<div ref="{{ rootRef }}" style="position:relative;background:#07080B;color:#ECEEF1;font-family:'Archivo',system-ui,sans-serif;overflow-x:clip;min-height:100vh;-webkit-font-smoothing:antialiased;">
+
+  <div aria-hidden="true" style="position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(110% 80% at 15% 0%, rgba(125,211,252,0.07) 0%, rgba(125,211,252,0) 45%), radial-gradient(90% 80% at 95% 100%, rgba(52,211,153,0.06) 0%, rgba(52,211,153,0) 48%), #07080B;"></div>
+  <div aria-hidden="true" style="position:fixed;inset:0;z-index:60;pointer-events:none;opacity:0.045;mix-blend-mode:soft-light;background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E&quot;);"></div>
+
+  <nav style="position:fixed;top:0;left:0;right:0;z-index:40;display:flex;align-items:center;justify-content:space-between;padding:16px clamp(18px,3.4vw,44px);background:linear-gradient(180deg,#07080B 55%,rgba(7,8,11,0));">
+    <a href="Compation.dc.html" style="display:flex;align-items:center;gap:11px;text-decoration:none;">
+      <span style="position:relative;width:26px;height:26px;border-radius:7px;border:1.5px solid rgba(236,238,241,0.5);display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;">
+        <span style="position:absolute;width:15px;height:1.6px;background:#F5B544;transform:rotate(38deg);border-radius:2px;"></span>
+        <span style="position:absolute;width:15px;height:1.6px;background:#34D399;transform:rotate(-38deg);border-radius:2px;box-shadow:0 0 6px rgba(52,211,153,0.7);"></span>
+      </span>
+      <span style="font-family:'Bricolage Grotesque','Archivo',sans-serif;font-weight:700;font-size:18px;letter-spacing:-0.02em;color:#ECEEF1;">Compation</span>
+    </a>
+    <div style="display:flex;align-items:center;gap:clamp(14px,2vw,28px);">
+      <div data-navlinks style="display:flex;align-items:center;gap:clamp(14px,2vw,28px);">
+        <a href="Thesis.dc.html" style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.04em;text-decoration:none;white-space:nowrap;color:#9AA1AC;">the thesis</a>
+        <a href="HowItWorks.dc.html" style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.04em;text-decoration:none;white-space:nowrap;color:#ECEEF1;">how it works</a>
+        <a href="Builders.dc.html" style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.04em;text-decoration:none;white-space:nowrap;color:#9AA1AC;">builders</a>
+      </div>
+      <a href="https://compation.vercel.app" target="_blank" rel="noopener" style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.02em;color:#07080B;text-decoration:none;background:#34D399;padding:8px 15px;border-radius:8px;font-weight:500;white-space:nowrap;">Open demo ↗</a>
+    </div>
+  </nav>
+
+  <main style="position:relative;z-index:10;">
+
+    <header style="padding:clamp(120px,18vh,200px) clamp(20px,6vw,90px) clamp(50px,7vh,90px);max-width:1120px;margin:0 auto;">
+      <div data-reveal style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:#7DD3FC;margin-bottom:24px;">Architecture</div>
+      <h1 data-reveal data-delay="0.05" style="margin:0;max-width:16ch;font-family:'Bricolage Grotesque','Archivo',sans-serif;font-weight:700;font-size:clamp(2.5rem,6vw,5.6rem);line-height:0.96;letter-spacing:-0.03em;color:#ECEEF1;">Azure brains. Injective hands. <span style="color:#9AA1AC;">A wallet that pays its own way.</span></h1>
+      <p data-reveal data-delay="0.12" style="margin:clamp(26px,3.5vw,40px) 0 0;max-width:62ch;font-size:clamp(1.1rem,1.5vw,1.42rem);line-height:1.5;color:#C4C9D1;">Keys never touch the model. The language model decides intent; a deterministic engine decides size; Injective signs and broadcasts; and the wallet pays its own way — then earns.</p>
+    </header>
+
+    <section style="padding:clamp(40px,6vh,80px) clamp(20px,6vw,90px) clamp(60px,8vh,100px);border-top:1px solid rgba(255,255,255,0.07);">
+      <div style="max-width:1120px;margin:0 auto;">
+        <div data-reveal style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:#9AA1AC;margin-bottom:30px;">The pipeline · keys stay local</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;align-items:stretch;">
+          <div data-reveal data-delay="0.02" style="border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:24px;background:rgba(255,255,255,0.015);display:flex;flex-direction:column;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;color:#9AA1AC;margin-bottom:14px;">01 · INTENT</div>
+            <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:1.12rem;color:#ECEEF1;letter-spacing:-0.01em;">You, in plain English</div>
+            <div style="font-size:13.5px;line-height:1.55;color:#8B929C;margin-top:8px;flex:1;">"I spend ~$40k/month on H100s — hedge most of it."</div>
+            <div style="margin-top:16px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#5C6472;">passes → exposure</div>
+          </div>
+          <div data-reveal data-delay="0.08" style="border:1px solid rgba(125,211,252,0.3);border-radius:16px;padding:24px;background:rgba(125,211,252,0.04);display:flex;flex-direction:column;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;color:#7DD3FC;margin-bottom:14px;">02 · AZURE BRAINS</div>
+            <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:1.12rem;color:#ECEEF1;letter-spacing:-0.01em;">Reasons. Never sizes.</div>
+            <div style="font-size:13.5px;line-height:1.55;color:#8B929C;margin-top:8px;flex:1;">gpt-5.4-mini picks intent &amp; strategy and narrates — but never emits a number.</div>
+            <div style="margin-top:16px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#3F86A8;">passes → intent + strategy</div>
+          </div>
+          <div data-reveal data-delay="0.14" style="border:1px solid rgba(52,211,153,0.32);border-radius:16px;padding:24px;background:rgba(52,211,153,0.05);display:flex;flex-direction:column;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;color:#34D399;margin-bottom:14px;">03 · RISK ENGINE</div>
+            <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:1.12rem;color:#ECEEF1;letter-spacing:-0.01em;">Sizes. Constraint-checks.</div>
+            <div style="font-size:13.5px;line-height:1.55;color:#8B929C;margin-top:8px;flex:1;">Deterministic math owns size, margin, liquidation buffer, slippage — every figure logged.</div>
+            <div style="margin-top:16px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#2C7B5E;">passes → signed order</div>
+          </div>
+          <div data-reveal data-delay="0.2" style="border:1px solid rgba(255,255,255,0.12);border-radius:16px;padding:24px;background:rgba(255,255,255,0.02);display:flex;flex-direction:column;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;color:#ECEEF1;margin-bottom:14px;">04 · INJECTIVE HANDS</div>
+            <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:1.12rem;color:#ECEEF1;letter-spacing:-0.01em;">Signs &amp; broadcasts.</div>
+            <div style="font-size:13.5px;line-height:1.55;color:#8B929C;margin-top:8px;flex:1;">sdk-ts + the MCP server open the position on the on-chain CLOB.</div>
+            <div style="margin-top:16px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#5C6472;">passes → tx hash</div>
+          </div>
+        </div>
+        <div data-reveal data-delay="0.1" style="margin-top:14px;border:1px solid rgba(245,181,68,0.28);border-radius:16px;padding:24px clamp(22px,3vw,34px);background:rgba(245,181,68,0.04);display:flex;flex-wrap:wrap;align-items:center;gap:18px 32px;justify-content:space-between;">
+          <div style="display:flex;align-items:center;gap:16px;">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;color:#F5B544;">THE WALLET</span>
+            <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:1.12rem;color:#ECEEF1;letter-spacing:-0.01em;">Pays its way, then earns.</span>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;font-family:'JetBrains Mono',monospace;font-size:11.5px;">
+            <span style="border:1px solid rgba(255,255,255,0.12);border-radius:999px;padding:6px 12px;color:#9AA1AC;">pays x402 · $0.01 USDC</span>
+            <span style="border:1px solid rgba(255,255,255,0.12);border-radius:999px;padding:6px 12px;color:#9AA1AC;">holds ERC-8004 #49</span>
+            <span style="border:1px solid rgba(52,211,153,0.25);border-radius:999px;padding:6px 12px;color:#34D399;">feeRecipient on every fill</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section style="padding:clamp(60px,9vh,110px) clamp(20px,6vw,90px);border-top:1px solid rgba(255,255,255,0.07);">
+      <div style="max-width:1120px;margin:0 auto;">
+        <div data-reveal style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:#9AA1AC;margin-bottom:20px;">Components</div>
+        <h2 data-reveal data-delay="0.05" style="margin:0 0 clamp(36px,5vh,56px);max-width:20ch;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:clamp(1.9rem,4vw,3.4rem);line-height:1.0;letter-spacing:-0.025em;color:#ECEEF1;">Six parts, each demoable on its own.</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:14px;">
+          <div data-reveal data-delay="0.02" style="border:1px solid rgba(255,255,255,0.09);border-radius:14px;padding:24px;"><div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;color:#7DD3FC;margin-bottom:12px;">ORCHESTRATOR</div><p style="margin:0;font-size:14px;line-height:1.6;color:#A4ABB5;">Azure OpenAI via the Vercel AI SDK. Streams reasoning, calls tools, narrates — never sizes.</p></div>
+          <div data-reveal data-delay="0.06" style="border:1px solid rgba(255,255,255,0.09);border-radius:14px;padding:24px;"><div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;color:#34D399;margin-bottom:12px;">RISK ENGINE</div><p style="margin:0;font-size:14px;line-height:1.6;color:#A4ABB5;">Pure, deterministic hedge math. 67 unit tests. Throws typed errors, never silent failures.</p></div>
+          <div data-reveal data-delay="0.1" style="border:1px solid rgba(255,255,255,0.09);border-radius:14px;padding:24px;"><div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;color:#ECEEF1;margin-bottom:12px;">INJECTIVE EXECUTOR</div><p style="margin:0;font-size:14px;line-height:1.6;color:#A4ABB5;">@injectivelabs/sdk-ts for signing; the MCP server (37 tools) for discovery. Returns real tx hashes.</p></div>
+          <div data-reveal data-delay="0.02" style="border:1px solid rgba(255,255,255,0.09);border-radius:14px;padding:24px;"><div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;color:#7DD3FC;margin-bottom:12px;">X402 PAYER</div><p style="margin:0;font-size:14px;line-height:1.6;color:#A4ABB5;">Handles the 402 → sign USDC → 200 flow, and records the receipt: amount, tx, latency.</p></div>
+          <div data-reveal data-delay="0.06" style="border:1px solid rgba(255,255,255,0.09);border-radius:14px;padding:24px;"><div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;color:#34D399;margin-bottom:12px;">ERC-8004 IDENTITY</div><p style="margin:0;font-size:14px;line-height:1.6;color:#A4ABB5;">Identity NFT #49 in Injective's registry; the wallet set as fee recipient to earn rebates.</p></div>
+          <div data-reveal data-delay="0.1" style="border:1px solid rgba(255,255,255,0.09);border-radius:14px;padding:24px;"><div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;color:#F5B544;margin-bottom:12px;">DECISION-TRAIL LOGGER</div><p style="margin:0;font-size:14px;line-height:1.6;color:#A4ABB5;">Persists every observation, decision, tool call, and result — rendered as a transparent timeline.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section style="padding:clamp(60px,9vh,110px) clamp(20px,6vw,90px);border-top:1px solid rgba(255,255,255,0.07);background:#090A0E;">
+      <div style="max-width:1120px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:clamp(34px,5vw,72px);align-items:center;">
+        <div data-reveal>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:#34D399;margin-bottom:20px;">The trust split</div>
+          <h2 style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:clamp(1.8rem,3.4vw,2.8rem);line-height:1.03;letter-spacing:-0.02em;color:#ECEEF1;">The model reasons. The engine sizes.</h2>
+          <p style="margin:22px 0 0;font-size:clamp(1.02rem,1.2vw,1.18rem);line-height:1.64;color:#A4ABB5;">This is the whole trust model. Language is good at intent and bad at arithmetic — so the LLM never touches a position size. Every number is computed by deterministic code, constraint-checked, and logged.</p>
+        </div>
+        <div data-reveal data-delay="0.08" style="font-family:'JetBrains Mono',monospace;border:1px solid rgba(255,255,255,0.1);border-radius:16px;overflow:hidden;">
+          <div style="padding:16px 22px;border-bottom:1px solid rgba(255,255,255,0.07);display:flex;justify-content:space-between;"><span style="font-size:12.5px;color:#7DD3FC;">model</span><span style="font-size:12.5px;color:#8B929C;">intent · strategy · narration</span></div>
+          <div style="padding:16px 22px;border-bottom:1px solid rgba(255,255,255,0.07);display:flex;justify-content:space-between;"><span style="font-size:12.5px;color:#34D399;">engine</span><span style="font-size:12.5px;color:#8B929C;">size · margin · liq · slippage</span></div>
+          <div style="padding:16px 22px;display:flex;justify-content:space-between;"><span style="font-size:12.5px;color:#F5B544;">never</span><span style="font-size:12.5px;color:#8B929C;">a hallucinated number on screen</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section style="padding:clamp(60px,9vh,110px) clamp(20px,6vw,90px);border-top:1px solid rgba(255,255,255,0.07);">
+      <div style="max-width:1120px;margin:0 auto;">
+        <div data-reveal style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:#9AA1AC;margin-bottom:24px;">The stack · TypeScript end-to-end</div>
+        <div data-reveal data-delay="0.05" style="display:flex;flex-wrap:wrap;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12.5px;">
+          <span style="border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:10px 15px;color:#C4C9D1;">Next.js 16 · React 19</span>
+          <span style="border:1px solid rgba(125,211,252,0.25);border-radius:10px;padding:10px 15px;color:#7DD3FC;">Azure OpenAI · Vercel AI SDK</span>
+          <span style="border:1px solid rgba(52,211,153,0.25);border-radius:10px;padding:10px 15px;color:#34D399;">@injectivelabs/sdk-ts</span>
+          <span style="border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:10px 15px;color:#C4C9D1;">Injective MCP · 37 tools</span>
+          <span style="border:1px solid rgba(125,211,252,0.25);border-radius:10px;padding:10px 15px;color:#7DD3FC;">@injectivelabs/x402</span>
+          <span style="border:1px solid rgba(52,211,153,0.25);border-radius:10px;padding:10px 15px;color:#34D399;">ERC-8004</span>
+          <span style="border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:10px 15px;color:#C4C9D1;">Prisma · SQLite</span>
+          <span style="border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:10px 15px;color:#C4C9D1;">pnpm workspaces</span>
+        </div>
+      </div>
+    </section>
+
+    <section style="padding:clamp(80px,12vh,150px) clamp(20px,6vw,90px) clamp(60px,8vh,100px);border-top:1px solid rgba(255,255,255,0.07);text-align:center;">
+      <h2 data-reveal style="margin:0 auto;max-width:18ch;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:clamp(2rem,5vw,4rem);line-height:0.98;letter-spacing:-0.03em;color:#ECEEF1;">Want to run it yourself?</h2>
+      <p data-reveal data-delay="0.06" style="margin:24px auto 0;max-width:48ch;font-size:clamp(1.05rem,1.3vw,1.25rem);line-height:1.6;color:#9AA1AC;">The whole thing is open source — clone it, point it at testnet, and watch a real position open.</p>
+      <div data-reveal data-delay="0.12" style="display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin-top:36px;">
+        <a href="Builders.dc.html" style="display:inline-flex;align-items:center;gap:9px;background:#34D399;color:#07080B;text-decoration:none;font-weight:600;font-size:15px;padding:14px 22px;border-radius:11px;font-family:'Archivo',sans-serif;white-space:nowrap;">For builders →</a>
+        <a href="https://github.com/OoJae/compation" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:9px;color:#ECEEF1;text-decoration:none;font-weight:500;font-size:15px;padding:14px 20px;border-radius:11px;border:1px solid rgba(236,238,241,0.2);font-family:'Archivo',sans-serif;white-space:nowrap;">Read the repo ↗</a>
+      </div>
+    </section>
+
+    <footer style="max-width:1120px;margin:0 auto;padding:40px clamp(20px,6vw,90px) 44px;border-top:1px solid rgba(255,255,255,0.08);">
+      <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:18px;">
+        <a href="Compation.dc.html" style="display:flex;align-items:center;gap:11px;text-decoration:none;">
+          <span style="position:relative;width:24px;height:24px;border-radius:6px;border:1.5px solid rgba(236,238,241,0.4);display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;">
+            <span style="position:absolute;width:13px;height:1.5px;background:#F5B544;transform:rotate(38deg);border-radius:2px;"></span>
+            <span style="position:absolute;width:13px;height:1.5px;background:#34D399;transform:rotate(-38deg);border-radius:2px;"></span>
+          </span>
+          <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:15px;color:#ECEEF1;letter-spacing:-0.01em;">Compation</span>
+        </a>
+        <div style="display:flex;flex-wrap:wrap;gap:18px 24px;font-family:'JetBrains Mono',monospace;font-size:12px;">
+          <a href="Thesis.dc.html" style="color:#9AA1AC;text-decoration:none;">the thesis</a>
+          <a href="Builders.dc.html" style="color:#9AA1AC;text-decoration:none;">builders</a>
+          <a href="Manifesto.dc.html" style="color:#9AA1AC;text-decoration:none;">manifesto</a>
+          <a href="Pricing.dc.html" style="color:#9AA1AC;text-decoration:none;">pricing</a>
+          <a href="https://compation.vercel.app" target="_blank" rel="noopener" style="color:#34D399;text-decoration:none;">live demo ↗</a>
+        </div>
+      </div>
+      <p style="margin:24px 0 0;max-width:80ch;font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.7;color:#5C6472;">Compation is non-custodial tooling that executes your stated intent — not a custodian, and not financial advice. Built on Injective, powered by Azure OpenAI.</p>
+    </footer>
+
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  constructor(props){ super(props); this.rootRef = React.createRef(); }
+  renderVals(){ return { rootRef: this.rootRef }; }
+  componentDidMount(){
+    this.reduced = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    this.setupReveals();
+    this.onScroll = () => this.checkReveals();
+    window.addEventListener('scroll', this.onScroll, {passive:true, capture:true});
+    requestAnimationFrame(()=> this.checkReveals());
+    setTimeout(()=> this.checkReveals(), 260);
+    setTimeout(()=> this.revealAll(), 4000);
+    if(!this.reduced){ this._raf = requestAnimationFrame(()=> this.tick()); }
+  }
+  componentWillUnmount(){ cancelAnimationFrame(this._raf); window.removeEventListener('scroll', this.onScroll, {capture:true}); }
+  tick(){
+    this.checkReveals();
+    if(this._revealEls && this._revealEls.every(o=>o.done)) return;
+    this._raf = requestAnimationFrame(()=> this.tick());
+  }
+  q(s){ const r=this.rootRef.current; return r? r.querySelector(s): null; }
+  qa(s){ const r=this.rootRef.current; return r? Array.from(r.querySelectorAll(s)): []; }
+  setupReveals(){
+    const els = this.qa('[data-reveal]');
+    if(this.reduced){ els.forEach(e=> e.style.opacity='1'); return; }
+    els.forEach(e=>{ e.style.opacity='0'; e.style.transform='translateY(26px)'; });
+    this._revealEls = els.map(e=>({el:e, done:false, t0:0, delay:parseFloat(e.getAttribute('data-delay')||'0')}));
+    this.checkReveals();
+  }
+  revealAll(){ if(!this._revealEls) return; for(const o of this._revealEls){ if(o.done) continue; o.done=true; o.el.style.opacity='1'; o.el.style.transform='none'; } }
+  checkReveals(){
+    if(!this._revealEls) return;
+    const vh=window.innerHeight, now=performance.now();
+    for(const o of this._revealEls){
+      if(o.done) continue;
+      const r=o.el.getBoundingClientRect();
+      if(!o.t0){
+        if(r.top < vh*0.92 && r.bottom > -60){ o.t0 = now + o.delay*1000; } else { continue; }
+      }
+      let k=(now - o.t0)/820; if(k<0) k=0;
+      const e=1-Math.pow(1-Math.min(1,k),3);
+      o.el.style.opacity=e.toFixed(3);
+      o.el.style.transform='translateY('+(26*(1-e)).toFixed(2)+'px)';
+      if(k>=1){ o.el.style.opacity='1'; o.el.style.transform='none'; o.done=true; }
+    }
+  }
+}
+</script>
+</body>
+</html>

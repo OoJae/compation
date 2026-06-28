@@ -10,13 +10,13 @@ const LABELS: Record<string, string> = {
 function dotClass(state?: string): string {
   switch (state) {
     case 'output-available':
-      return 'bg-emerald-400';
+      return 'bg-teal shadow-[0_0_8px_rgba(52,211,153,0.5)]';
     case 'output-error':
-      return 'bg-red-400';
+      return 'bg-rose shadow-[0_0_8px_rgba(251,113,133,0.5)]';
     case 'input-available':
-      return 'bg-sky-400';
+      return 'bg-sky shadow-[0_0_8px_rgba(125,211,252,0.5)]';
     default:
-      return 'bg-amber-400 animate-pulse';
+      return 'bg-gold shadow-[0_0_8px_rgba(245,181,68,0.6)] animate-pulse';
   }
 }
 
@@ -45,18 +45,18 @@ function summary(name: string, output: any): string | null {
 export function DecisionTrail({ toolParts }: { toolParts: AnyPart[] }) {
   if (toolParts.length === 0) return null;
   return (
-    <div className="rounded-xl border border-neutral-800 bg-neutral-900/40 p-4">
-      <div className="mb-3 text-xs font-medium uppercase tracking-wider text-neutral-500">Decision trail</div>
-      <ol className="space-y-3">
+    <div className="border border-[rgba(255,255,255,0.08)] rounded-[15px] bg-[linear-gradient(180deg,rgba(255,255,255,0.016),rgba(255,255,255,0))] p-[17px]">
+      <div className="mb-[15px] font-mono text-[10.5px] uppercase tracking-[0.16em] text-mut3">Decision trail</div>
+      <ol className="flex flex-col gap-[14px]">
         {toolParts.map((p, i) => {
           const name = p.type.replace('tool-', '');
           const s = summary(name, p.output);
           return (
-            <li key={i} className="flex items-start gap-3">
-              <span className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${dotClass(p.state)}`} />
+            <li key={i} className="flex items-start gap-[11px]">
+              <span className={`mt-[3px] h-[9px] w-[9px] shrink-0 rounded-full ${dotClass(p.state)}`} />
               <div className="min-w-0 flex-1">
-                <div className="text-sm text-neutral-200">{LABELS[name] ?? name}</div>
-                {s ? <div className="tnum truncate text-xs text-neutral-500">{s}</div> : null}
+                <div className="text-[13.5px] font-medium text-paper">{LABELS[name] ?? name}</div>
+                {s ? <div className="tnum mt-[2px] truncate font-mono text-[11.5px] text-mut2">{s}</div> : null}
               </div>
             </li>
           );

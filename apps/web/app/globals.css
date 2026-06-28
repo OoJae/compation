@@ -1,26 +1,116 @@
 @import "tailwindcss";
 
 @theme {
-  --font-mono: ui-monospace, "SF Mono", "SFMono-Regular", Menlo, monospace;
+  /* Brand fonts (wired to next/font CSS variables in layout.tsx) */
+  --font-sans: var(--font-archivo), system-ui, sans-serif;
+  --font-display: var(--font-bricolage), var(--font-archivo), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, "SF Mono", Menlo, monospace;
+  --font-serif: var(--font-newsreader), Georgia, serif;
+
+  /* Brand palette (Compation / Yeti-Wells design system) */
+  --color-ink: #07080b;
+  --color-ink2: #090a0e;
+  --color-paper: #eceef1;
+  --color-teal: #34d399;
+  --color-gold: #f5b544;
+  --color-sky: #7dd3fc;
+  --color-rose: #fb7185;
+  --color-mut: #9aa1ac;
+  --color-mut2: #8b929c;
+  --color-mut3: #5c6472;
+  --color-mut4: #4f5663;
 }
 
 html {
   color-scheme: dark;
+  scroll-behavior: smooth;
 }
 
 body {
-  background-color: #070708;
-  color: #e6e6e6;
+  background-color: #07080b;
+  color: #eceef1;
+  font-family: var(--font-archivo), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: #34d399;
+  color: #07080b;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  border: 2px solid #07080b;
 }
 
 .tnum {
   font-variant-numeric: tabular-nums;
 }
 
-/* faint grid backdrop */
+/* faint dotted grid backdrop */
 .grid-bg {
-  background-image:
-    radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.04) 1px, transparent 0);
-  background-size: 28px 28px;
+  background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.035) 1px, transparent 0);
+  background-size: 30px 30px;
+}
+
+@keyframes liveDot {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.78);
+  }
+}
+.live-dot {
+  animation: liveDot 2.4s ease-in-out infinite;
+}
+
+/* What-if range slider (brand style) */
+input[type="range"].wf {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #34d399 0 var(--p, 40%), rgba(255, 255, 255, 0.1) var(--p, 40%) 100%);
+  outline: none;
+}
+input[type="range"].wf::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #eceef1;
+  border: 3px solid #07080b;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+}
+input[type="range"].wf::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #eceef1;
+  border: 3px solid #07080b;
+  cursor: pointer;
+}
+
+/* scroll-reveal (driven by components/Reveal.tsx) */
+[data-reveal] {
+  will-change: opacity, transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+  }
+  html {
+    scroll-behavior: auto;
+  }
 }

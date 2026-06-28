@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;500;700&family=Newsreader:ital,opsz,wght@0,18..40,400;1,18..40,400;1,18..40,500&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:#07080B}
+  ::selection{background:#34D399;color:#07080B}
+  @media(max-width:720px){[data-navlinks]{display:none!important}}
+  @media (prefers-reduced-motion: reduce){*{animation:none!important}html{scroll-behavior:auto}}
+</style>
+</helmet>
+<div ref="{{ rootRef }}" style="position:relative;background:#07080B;color:#ECEEF1;font-family:'Archivo',system-ui,sans-serif;overflow-x:clip;min-height:100vh;-webkit-font-smoothing:antialiased;">
+
+  <div aria-hidden="true" style="position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(120% 70% at 50% -10%, rgba(52,211,153,0.07) 0%, rgba(52,211,153,0) 50%), #07080B;"></div>
+  <div aria-hidden="true" style="position:fixed;inset:0;z-index:60;pointer-events:none;opacity:0.05;mix-blend-mode:soft-light;background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E&quot;);"></div>
+
+  <nav style="position:fixed;top:0;left:0;right:0;z-index:40;display:flex;align-items:center;justify-content:space-between;padding:16px clamp(18px,3.4vw,44px);background:linear-gradient(180deg,#07080B 55%,rgba(7,8,11,0));">
+    <a href="Compation.dc.html" style="display:flex;align-items:center;gap:11px;text-decoration:none;">
+      <span style="position:relative;width:26px;height:26px;border-radius:7px;border:1.5px solid rgba(236,238,241,0.5);display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;">
+        <span style="position:absolute;width:15px;height:1.6px;background:#F5B544;transform:rotate(38deg);border-radius:2px;"></span>
+        <span style="position:absolute;width:15px;height:1.6px;background:#34D399;transform:rotate(-38deg);border-radius:2px;box-shadow:0 0 6px rgba(52,211,153,0.7);"></span>
+      </span>
+      <span style="font-family:'Bricolage Grotesque','Archivo',sans-serif;font-weight:700;font-size:18px;letter-spacing:-0.02em;color:#ECEEF1;">Compation</span>
+    </a>
+    <div style="display:flex;align-items:center;gap:clamp(14px,2vw,28px);">
+      <div data-navlinks style="display:flex;align-items:center;gap:clamp(14px,2vw,28px);">
+        <a href="Thesis.dc.html" style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.04em;text-decoration:none;white-space:nowrap;color:#9AA1AC;">the thesis</a>
+        <a href="HowItWorks.dc.html" style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.04em;text-decoration:none;white-space:nowrap;color:#9AA1AC;">how it works</a>
+        <a href="Builders.dc.html" style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.04em;text-decoration:none;white-space:nowrap;color:#9AA1AC;">builders</a>
+      </div>
+      <a href="https://compation.vercel.app" target="_blank" rel="noopener" style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.02em;color:#07080B;text-decoration:none;background:#34D399;padding:8px 15px;border-radius:8px;font-weight:500;white-space:nowrap;">Open demo ↗</a>
+    </div>
+  </nav>
+
+  <main style="position:relative;z-index:10;">
+
+    <header style="padding:clamp(130px,20vh,230px) clamp(20px,6vw,90px) clamp(40px,6vh,80px);max-width:1000px;margin:0 auto;">
+      <div data-reveal style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:#9AA1AC;margin-bottom:28px;">Manifesto</div>
+      <h1 data-reveal data-delay="0.05" style="margin:0;font-family:'Bricolage Grotesque','Archivo',sans-serif;font-weight:700;font-size:clamp(2.7rem,7.5vw,7rem);line-height:0.94;letter-spacing:-0.035em;color:#ECEEF1;">Compute is the new commodity.</h1>
+      <p data-reveal data-delay="0.12" style="margin:clamp(22px,3vw,34px) 0 0;font-family:'Newsreader',Georgia,serif;font-style:italic;font-size:clamp(1.4rem,3vw,2.4rem);line-height:1.2;color:#34D399;">It should trade like one.</p>
+      <p data-reveal data-delay="0.18" style="margin:clamp(28px,4vw,44px) 0 0;max-width:54ch;font-size:clamp(1.05rem,1.4vw,1.32rem);line-height:1.55;color:#9AA1AC;">A short argument for why the price of intelligence deserves a market — and an agent to actually use it.</p>
+    </header>
+
+    <article style="max-width:720px;margin:0 auto;padding:clamp(30px,5vh,70px) clamp(20px,6vw,40px) clamp(40px,6vh,70px);">
+
+      <div data-reveal style="padding:clamp(40px,6vh,70px) 0;border-top:1px solid rgba(255,255,255,0.08);">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:#F5B544;margin-bottom:18px;">01 — THE COST</div>
+        <p style="margin:0;font-size:clamp(1.15rem,1.6vw,1.4rem);line-height:1.6;color:#C4C9D1;">Every company building AI has the same biggest number on its P&amp;L: GPU compute. It is the cost of training, the cost of serving, the cost of every token. And it moves — H100 rental rates swing with demand spikes and supply crunches, sometimes doubling a budget overnight.</p>
+      </div>
+
+      <blockquote data-reveal style="margin:0;padding:clamp(30px,5vh,56px) 0;border-top:1px solid rgba(255,255,255,0.08);">
+        <p style="margin:0;font-family:'Newsreader',Georgia,serif;font-style:italic;font-size:clamp(1.6rem,3.4vw,2.6rem);line-height:1.22;letter-spacing:-0.01em;color:#ECEEF1;">Oil has a hedge. Wheat has a hedge. Interest rates have a hedge. Compute — the input to everything — had none.</p>
+      </blockquote>
+
+      <div data-reveal style="padding:clamp(40px,6vh,70px) 0;border-top:1px solid rgba(255,255,255,0.08);">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:#7DD3FC;margin-bottom:18px;">02 — THE MARKET</div>
+        <p style="margin:0;font-size:clamp(1.15rem,1.6vw,1.4rem);line-height:1.6;color:#C4C9D1;">That changed. Injective put the first on-chain NVIDIA H100 rental-rate market live, priced hourly by an oracle. For the first time, the cost of compute is something you can take a position on — long or short, on-chain, settled in seconds.</p>
+      </div>
+
+      <div data-reveal style="padding:clamp(40px,6vh,70px) 0;border-top:1px solid rgba(255,255,255,0.08);">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:#9AA1AC;margin-bottom:18px;">03 — THE GAP</div>
+        <p style="margin:0;font-size:clamp(1.15rem,1.6vw,1.4rem);line-height:1.6;color:#C4C9D1;">But a perpetual futures market is not a product a founder can use. Sizing, margin, liquidation, funding — it is a trader's instrument, written in a trader's language. The market existed. The usability did not.</p>
+      </div>
+
+      <blockquote data-reveal style="margin:0;padding:clamp(30px,5vh,56px) 0;border-top:1px solid rgba(255,255,255,0.08);">
+        <p style="margin:0;font-family:'Newsreader',Georgia,serif;font-style:italic;font-size:clamp(1.6rem,3.4vw,2.6rem);line-height:1.22;letter-spacing:-0.01em;color:#ECEEF1;">A market is not a tool until someone can actually hold it.</p>
+      </blockquote>
+
+      <div data-reveal style="padding:clamp(40px,6vh,70px) 0;border-top:1px solid rgba(255,255,255,0.08);">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:#34D399;margin-bottom:18px;">04 — THE AGENT</div>
+        <p style="margin:0;font-size:clamp(1.15rem,1.6vw,1.4rem);line-height:1.6;color:#C4C9D1;">Compation is the tool. You say your burn in plain language; it reasons about strategy, sizes the hedge in deterministic code, and opens a real position on-chain — with a tx hash you can click. The trader's instrument becomes a single sentence.</p>
+      </div>
+
+      <div data-reveal style="padding:clamp(40px,6vh,70px) 0;border-top:1px solid rgba(255,255,255,0.08);">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:#F5B544;margin-bottom:18px;">05 — THE LOOP</div>
+        <p style="margin:0;font-size:clamp(1.15rem,1.6vw,1.4rem);line-height:1.6;color:#C4C9D1;">And then it does something stranger. Compation pays for its own compute — settling a micropayment on-chain for the data and inference it used. An agent that spends money on compute, and hedges the price of the very thing it spends on. The loop closes on itself.</p>
+      </div>
+
+      <blockquote data-reveal style="margin:0;padding:clamp(40px,6vh,70px) 0 0;border-top:1px solid rgba(255,255,255,0.08);">
+        <p style="margin:0;font-family:'Newsreader',Georgia,serif;font-style:italic;font-size:clamp(1.7rem,3.8vw,3rem);line-height:1.18;letter-spacing:-0.01em;color:#34D399;">Compute + Computation — and a little compassion for every founder watching their GPU bill.</p>
+      </blockquote>
+
+    </article>
+
+    <section style="padding:clamp(60px,10vh,130px) clamp(20px,6vw,90px) clamp(60px,8vh,100px);border-top:1px solid rgba(255,255,255,0.07);text-align:center;">
+      <h2 data-reveal style="margin:0 auto;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:clamp(2.4rem,7vw,6rem);line-height:0.94;letter-spacing:-0.035em;color:#ECEEF1;">Hedge the price<br>of compute<span style="color:#34D399;">.</span></h2>
+      <div data-reveal data-delay="0.1" style="display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin-top:36px;">
+        <a href="https://compation.vercel.app" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:9px;background:#34D399;color:#07080B;text-decoration:none;font-weight:600;font-size:15.5px;padding:15px 24px;border-radius:12px;font-family:'Archivo',sans-serif;white-space:nowrap;">Open the live demo →</a>
+        <a href="Thesis.dc.html" style="display:inline-flex;align-items:center;gap:9px;color:#ECEEF1;text-decoration:none;font-weight:500;font-size:15.5px;padding:15px 22px;border-radius:12px;border:1px solid rgba(236,238,241,0.2);font-family:'Archivo',sans-serif;white-space:nowrap;">Read the thesis →</a>
+      </div>
+    </section>
+
+    <footer style="max-width:1120px;margin:0 auto;padding:40px clamp(20px,6vw,90px) 44px;border-top:1px solid rgba(255,255,255,0.08);">
+      <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:18px;">
+        <a href="Compation.dc.html" style="display:flex;align-items:center;gap:11px;text-decoration:none;">
+          <span style="position:relative;width:24px;height:24px;border-radius:6px;border:1.5px solid rgba(236,238,241,0.4);display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;">
+            <span style="position:absolute;width:13px;height:1.5px;background:#F5B544;transform:rotate(38deg);border-radius:2px;"></span>
+            <span style="position:absolute;width:13px;height:1.5px;background:#34D399;transform:rotate(-38deg);border-radius:2px;"></span>
+          </span>
+          <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:15px;color:#ECEEF1;letter-spacing:-0.01em;">Compation</span>
+        </a>
+        <div style="display:flex;flex-wrap:wrap;gap:18px 24px;font-family:'JetBrains Mono',monospace;font-size:12px;">
+          <a href="Thesis.dc.html" style="color:#9AA1AC;text-decoration:none;">the thesis</a>
+          <a href="HowItWorks.dc.html" style="color:#9AA1AC;text-decoration:none;">how it works</a>
+          <a href="Builders.dc.html" style="color:#9AA1AC;text-decoration:none;">builders</a>
+          <a href="Pricing.dc.html" style="color:#9AA1AC;text-decoration:none;">pricing</a>
+          <a href="https://compation.vercel.app" target="_blank" rel="noopener" style="color:#34D399;text-decoration:none;">live demo ↗</a>
+        </div>
+      </div>
+      <p style="margin:24px 0 0;max-width:80ch;font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.7;color:#5C6472;">Compation is non-custodial tooling that executes your stated intent — not a custodian, and not financial advice.</p>
+    </footer>
+
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  constructor(props){ super(props); this.rootRef = React.createRef(); }
+  renderVals(){ return { rootRef: this.rootRef }; }
+  componentDidMount(){
+    this.reduced = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    this.setupReveals();
+    this.onScroll = () => this.checkReveals();
+    window.addEventListener('scroll', this.onScroll, {passive:true, capture:true});
+    requestAnimationFrame(()=> this.checkReveals());
+    setTimeout(()=> this.checkReveals(), 260);
+    setTimeout(()=> this.revealAll(), 4000);
+    if(!this.reduced){ this._raf = requestAnimationFrame(()=> this.tick()); }
+  }
+  componentWillUnmount(){ cancelAnimationFrame(this._raf); window.removeEventListener('scroll', this.onScroll, {capture:true}); }
+  tick(){
+    this.checkReveals();
+    if(this._revealEls && this._revealEls.every(o=>o.done)) return;
+    this._raf = requestAnimationFrame(()=> this.tick());
+  }
+  q(s){ const r=this.rootRef.current; return r? r.querySelector(s): null; }
+  qa(s){ const r=this.rootRef.current; return r? Array.from(r.querySelectorAll(s)): []; }
+  setupReveals(){
+    const els = this.qa('[data-reveal]');
+    if(this.reduced){ els.forEach(e=> e.style.opacity='1'); return; }
+    els.forEach(e=>{ e.style.opacity='0'; e.style.transform='translateY(26px)'; });
+    this._revealEls = els.map(e=>({el:e, done:false, t0:0, delay:parseFloat(e.getAttribute('data-delay')||'0')}));
+    this.checkReveals();
+  }
+  revealAll(){ if(!this._revealEls) return; for(const o of this._revealEls){ if(o.done) continue; o.done=true; o.el.style.opacity='1'; o.el.style.transform='none'; } }
+  checkReveals(){
+    if(!this._revealEls) return;
+    const vh=window.innerHeight, now=performance.now();
+    for(const o of this._revealEls){
+      if(o.done) continue;
+      const r=o.el.getBoundingClientRect();
+      if(!o.t0){
+        if(r.top < vh*0.92 && r.bottom > -60){ o.t0 = now + o.delay*1000; } else { continue; }
+      }
+      let k=(now - o.t0)/820; if(k<0) k=0;
+      const e=1-Math.pow(1-Math.min(1,k),3);
+      o.el.style.opacity=e.toFixed(3);
+      o.el.style.transform='translateY('+(26*(1-e)).toFixed(2)+'px)';
+      if(k>=1){ o.el.style.opacity='1'; o.el.style.transform='none'; o.done=true; }
+    }
+  }
+}
+</script>
+</body>
+</html>

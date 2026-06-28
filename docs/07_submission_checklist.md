@@ -3,7 +3,7 @@
 **Program:** Injective Nova / Rising Star Program
 **Submission deadline:** **June 30, 2026**
 **Submit via TypeForm:** https://form.typeform.com/to/J8tQWS4p
-**Live demo:** https://compation.vercel.app  ·  **Repo:** https://github.com/OoJae/compation
+**Live demo:** https://compation.vercel.app (landing) → **Open demo →** https://compation.vercel.app/app  ·  **Repo:** https://github.com/OoJae/compation
 
 > One-liner: *Compation is an autonomous agent that hedges your AI compute costs on-chain — and pays for its own compute while it does.*
 

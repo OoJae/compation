@@ -36,12 +36,12 @@ export function X402Panel() {
   }
 
   return (
-    <div className="rounded-xl border border-sky-900/40 bg-sky-950/10 p-4">
-      <div className="mb-2 flex items-center justify-between">
-        <span className="text-xs font-medium uppercase tracking-wider text-sky-300">Agent self-payment · x402</span>
-        <span className="text-[11px] text-neutral-500">it pays its own way</span>
+    <div className="rounded-[15px] border border-[rgba(125,211,252,0.25)] bg-[rgba(125,211,252,0.04)] p-[17px]">
+      <div className="mb-[9px] flex items-baseline justify-between gap-[10px]">
+        <span className="font-mono text-[10.5px] tracking-[0.14em] uppercase text-sky">Agent self-payment · x402</span>
+        <span className="font-mono text-[10.5px] text-mut3">it pays its own way</span>
       </div>
-      <p className="mb-3 text-xs leading-relaxed text-neutral-400">
+      <p className="mb-[14px] text-[13px] leading-[1.55] text-mut">
         Compation pays a tiny USDC micropayment for the live Injective market data it uses — settled on-chain via x402
         (EIP-3009, gasless for the agent).
       </p>
@@ -50,28 +50,28 @@ export function X402Panel() {
         <button
           onClick={pay}
           disabled={false}
-          className="w-full rounded-lg bg-sky-500 px-3 py-2 text-sm font-medium text-sky-950 transition disabled:opacity-50"
+          className="w-full rounded-[11px] bg-sky px-3 py-[11px] font-sans text-[13.5px] font-semibold text-ink transition disabled:opacity-50"
         >
           Pay $0.01 USDC for live market data
         </button>
       )}
       {state === 'paying' && (
-        <button disabled className="w-full rounded-lg bg-sky-500 px-3 py-2 text-sm font-medium text-sky-950 opacity-50">
+        <button disabled className="w-full rounded-[11px] bg-sky px-3 py-[11px] font-sans text-[13.5px] font-semibold text-ink opacity-50">
           signing + settling on-chain…
         </button>
       )}
 
       {state === 'error' && (
-        <div className="mt-2 text-xs text-rose-400">x402 failed: {receipt?.error ?? 'unknown error'}</div>
+        <div className="mt-3 font-mono text-[11.5px] text-rose">x402 failed: {receipt?.error ?? 'unknown error'}</div>
       )}
 
       {state === 'submitted' && receipt && (
-        <div className="space-y-2">
-          <div className="flex items-center justify-between rounded-lg border border-amber-900/40 bg-amber-950/20 px-3 py-2">
-            <span className="text-sm font-medium text-amber-200">● Submitted · confirmation lagged</span>
-            <span className="tnum text-[11px] text-neutral-400">~{(receipt.latencyMs / 1000).toFixed(1)}s</span>
+        <div className="mt-3 space-y-2 border-t border-[rgba(255,255,255,0.07)] pt-3 font-mono text-[11.5px]">
+          <div className="flex items-center justify-between">
+            <span className="text-gold">● Submitted · confirmation lagged</span>
+            <span className="tnum text-gold">~{(receipt.latencyMs / 1000).toFixed(1)}s</span>
           </div>
-          <p className="text-[11px] leading-relaxed text-neutral-500">
+          <p className="text-[11px] leading-relaxed text-mut3">
             The payment was submitted on-chain but settlement confirmation didn&apos;t return in time. Verify on the
             explorer before paying again.
           </p>
@@ -81,10 +81,10 @@ export function X402Panel() {
                 href={receipt.explorerUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-lg border border-amber-800/50 bg-amber-900/20 px-3 py-1.5 text-xs text-amber-200 hover:bg-amber-900/40"
+                className="inline-flex items-center gap-2 text-gold no-underline hover:text-gold/80"
               >
-                <span className="font-mono">{shortHash(receipt.txHash)}</span>
-                <span className="text-amber-400">verify settlement ↗</span>
+                <span>{shortHash(receipt.txHash)}</span>
+                <span>verify settlement ↗</span>
               </a>
               <CopyButton value={receipt.txHash} />
             </div>
@@ -93,34 +93,37 @@ export function X402Panel() {
       )}
 
       {state === 'done' && receipt && (
-        <div className="space-y-2">
-          <div className="flex items-center justify-between rounded-lg border border-sky-900/40 bg-sky-950/20 px-3 py-2">
-            <span className="text-sm font-medium text-sky-200">● Paid {usd(receipt.amountUsdc)} USDC</span>
-            <span className="tnum text-[11px] text-neutral-400">~{(receipt.latencyMs / 1000).toFixed(1)}s · settled</span>
+        <div className="mt-3 space-y-[7px] border-t border-[rgba(255,255,255,0.07)] pt-3 font-mono text-[11.5px]">
+          <div className="flex items-center justify-between">
+            <span className="text-sky">● Paid {usd(receipt.amountUsdc)} USDC</span>
+            <span className="tnum text-sky">~{(receipt.latencyMs / 1000).toFixed(1)}s · settled</span>
           </div>
-          <div className="grid grid-cols-2 gap-2 text-[11px] text-neutral-500">
-            <div>
-              network <span className="tnum text-neutral-300">{receipt.network}</span>
-            </div>
-            <div>
-              received <span className="text-neutral-300">{receipt.dataPreview}</span>
-            </div>
+          <div className="flex justify-between gap-[12px]">
+            <span className="text-mut2">network</span>
+            <span className="tnum text-paper">{receipt.network}</span>
+          </div>
+          <div className="flex justify-between gap-[12px]">
+            <span className="text-mut2">received</span>
+            <span className="text-paper">{receipt.dataPreview}</span>
           </div>
           {receipt.txHash && (
-            <div className="flex items-center gap-2">
-              <a
-                href={receipt.explorerUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-lg border border-sky-800/50 bg-sky-900/20 px-3 py-1.5 text-xs text-sky-200 hover:bg-sky-900/40"
-              >
-                <span className="font-mono">{shortHash(receipt.txHash)}</span>
-                <span className="text-sky-400">view settlement ↗</span>
-              </a>
-              <CopyButton value={receipt.txHash} />
+            <div className="flex items-center justify-between gap-[12px]">
+              <span className="text-mut2">receipt</span>
+              <div className="flex items-center gap-2">
+                <a
+                  href={receipt.explorerUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 text-sky no-underline hover:text-sky/80"
+                >
+                  <span>{shortHash(receipt.txHash)}</span>
+                  <span>view settlement ↗</span>
+                </a>
+                <CopyButton value={receipt.txHash} />
+              </div>
             </div>
           )}
-          <button onClick={() => { setState('idle'); setReceipt(null); }} className="text-[11px] text-neutral-500 hover:text-neutral-300">
+          <button onClick={() => { setState('idle'); setReceipt(null); }} className="text-mut3 hover:text-paper">
             pay again
           </button>
         </div>

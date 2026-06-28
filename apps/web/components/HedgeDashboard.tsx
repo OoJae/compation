@@ -62,26 +62,26 @@ export function HedgeDashboard({ compute }: { compute: ComputeOutput }) {
   const netW = barFrac * (1 - hedgeRatio) * 100;
 
   return (
-    <div className="rounded-xl border border-neutral-800 bg-neutral-900/40 p-4">
-      <div className="mb-3 flex items-center justify-between">
-        <span className="text-xs font-medium uppercase tracking-wider text-neutral-500">Live hedge dashboard</span>
-        <span className="inline-flex items-center gap-1.5 text-xs text-neutral-400">
-          <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
+    <div className="border border-[rgba(255,255,255,0.08)] rounded-[15px] bg-[linear-gradient(180deg,rgba(255,255,255,0.016),rgba(255,255,255,0))] p-[17px]">
+      <div className="mb-1.5 flex items-center justify-between gap-2.5">
+        <span className="font-mono text-[10.5px] tracking-[0.14em] uppercase text-mut3">Live hedge dashboard</span>
+        <span className="font-mono text-[11px] text-mut2">
+          <span className="mr-[5px] inline-block h-1.5 w-1.5 rounded-full bg-teal align-middle live-dot" />
           H100 index{' '}
-          <span className="tnum text-emerald-300">{usd(displayIndex)}/hr</span>
+          <b className="tnum text-teal font-bold">{usd(displayIndex)}/hr</b>
         </span>
       </div>
 
-      <div className="mb-3 text-xs text-neutral-500">
-        Monthly compute bill <span className="tnum text-neutral-200">{usd(monthlyBill)}</span> · hedged{' '}
-        <span className="tnum text-neutral-200">{pct(hedgeRatio)}</span> on H100
-      </div>
+      <p className="mb-4 text-[12.5px] leading-[1.5] text-mut2">
+        Monthly compute bill <b className="tnum text-paper">{usd(monthlyBill)}</b> · hedged{' '}
+        <b className="tnum text-paper">{pct(hedgeRatio)}</b> on H100
+      </p>
 
       {/* What-if slider */}
-      <div className="mb-3">
-        <div className="mb-1 flex items-center justify-between text-xs">
-          <span className="text-neutral-500">If the H100 rate moves</span>
-          <span className="tnum text-neutral-200">
+      <div className="mb-1">
+        <div className="mb-[9px] flex items-baseline justify-between gap-2.5">
+          <span className="font-mono text-[11px] tracking-[0.06em] uppercase text-mut2">If the H100 rate moves</span>
+          <span className="tnum font-display text-[1.2rem] font-bold text-gold">
             {rising ? '+' : ''}
             {pct100}% → {usd(sim.newIndex)}/hr
           </span>
@@ -95,16 +95,19 @@ export function HedgeDashboard({ compute }: { compute: ComputeOutput }) {
           onChange={(e) => setPct100(Number(e.target.value))}
           aria-label="H100 rental rate change"
           aria-valuetext={`${rising ? '+' : ''}${pct100} percent`}
-          className="w-full accent-emerald-500"
+          className="wf w-full cursor-pointer"
+          style={{ ['--p' as string]: `${((pct100 + 50) / 100) * 100}%` }}
         />
-        <div className="mt-1 flex gap-1">
+        <div className="mt-[13px] flex flex-wrap gap-[7px]">
           {PRESETS.map((p) => (
             <button
               key={p}
               onClick={() => setPct100(p)}
               aria-pressed={pct100 === p}
-              className={`rounded px-1.5 py-0.5 text-[11px] ${
-                pct100 === p ? 'bg-neutral-700 text-neutral-100' : 'text-neutral-500 hover:text-neutral-300'
+              className={`cursor-pointer rounded-[8px] border px-[11px] py-[6px] font-mono text-[11px] ${
+                pct100 === p
+                  ? 'border-[rgba(52,211,153,0.4)] bg-[rgba(52,211,153,0.1)] text-teal'
+                  : 'border-[rgba(255,255,255,0.12)] bg-transparent text-mut hover:text-paper'
               }`}
             >
               {p > 0 ? '+' : ''}
@@ -115,25 +118,32 @@ export function HedgeDashboard({ compute }: { compute: ComputeOutput }) {
       </div>
 
       {/* Outcome */}
-      <div className="grid grid-cols-3 gap-2 text-center">
+      <div className="mt-4 grid grid-cols-3 gap-[9px]">
         <Stat label="Compute bill" value={usd(sim.newBill)} sub={`${rising ? '+' : ''}${usd(sim.billDelta)}`} subTone={rising ? 'red' : 'emerald'} />
         <Stat label="Hedge P&L" value={`${sim.hedgePnl >= 0 ? '+' : ''}${usd(sim.hedgePnl)}`} subTone="neutral" sub="long H100" valueTone={sim.hedgePnl >= 0 ? 'emerald' : 'red'} />
-        <Stat label="Net impact" value={`${sim.netImpact >= 0 ? '+' : ''}${usd(sim.netImpact)}`} sub={`${pct(hedgeRatio)} protected`} valueTone={Math.abs(sim.netImpact) < 1 ? 'neutral' : rising ? 'amber' : 'emerald'} />
+        <Stat
+          label="Net impact"
+          value={`${sim.netImpact >= 0 ? '+' : ''}${usd(sim.netImpact)}`}
+          sub={`${pct(hedgeRatio)} protected`}
+          subTone="emerald"
+          accent
+          valueTone={Math.abs(sim.netImpact) < 1 ? 'neutral' : rising ? 'amber' : 'emerald'}
+        />
       </div>
 
       {/* Split bar: how much of the bill move the hedge absorbs */}
-      <div className="mt-3">
-        <div className="flex h-2 w-full overflow-hidden rounded-full bg-neutral-800">
-          <div className="h-full bg-emerald-500/80" style={{ width: `${hedgeW}%` }} />
-          <div className="h-full bg-rose-500/70" style={{ width: `${netW}%` }} />
+      <div className="mt-[15px]">
+        <div className="flex h-[7px] w-full overflow-hidden rounded-[999px] bg-[rgba(255,255,255,0.05)]">
+          <div className="h-full bg-[linear-gradient(90deg,#34D399,#2BB389)]" style={{ width: `${hedgeW}%` }} />
+          <div className="h-full bg-[rgba(245,181,68,0.5)]" style={{ width: `${netW}%` }} />
         </div>
-        <div className="mt-1 flex justify-between text-[11px] text-neutral-500">
-          <span className="text-emerald-400/80">hedge absorbs {pct(hedgeRatio)}</span>
-          <span className="text-rose-400/80">you carry {pct(1 - hedgeRatio)}</span>
+        <div className="mt-2 flex justify-between font-mono text-[10.5px]">
+          <span className="text-teal">hedge absorbs <b>{pct(hedgeRatio)}</b></span>
+          <span className="text-gold">you carry <b>{pct(1 - hedgeRatio)}</b></span>
         </div>
       </div>
 
-      <p className="mt-3 text-[11px] leading-relaxed text-neutral-500">
+      <p className="mt-[13px] text-[12px] leading-[1.5] text-mut2">
         {rising
           ? `When H100 rent spikes, the long hedge pays ${usd(sim.hedgePnl)} back — you only absorb ${usd(Math.abs(sim.netImpact))} of a ${usd(sim.billDelta)} increase.`
           : delta < 0
@@ -150,20 +160,26 @@ function Stat({
   sub,
   subTone = 'neutral',
   valueTone = 'neutral',
+  accent = false,
 }: {
   label: string;
   value: string;
   sub?: string;
   subTone?: 'neutral' | 'red' | 'emerald' | 'amber';
   valueTone?: 'neutral' | 'red' | 'emerald' | 'amber';
+  accent?: boolean;
 }) {
   const tone = (t: string) =>
-    t === 'red' ? 'text-rose-400' : t === 'emerald' ? 'text-emerald-300' : t === 'amber' ? 'text-amber-300' : 'text-neutral-100';
+    t === 'red' ? 'text-rose' : t === 'emerald' ? 'text-teal' : t === 'amber' ? 'text-gold' : 'text-paper';
   return (
-    <div className="rounded-lg border border-neutral-800/70 bg-neutral-950/40 p-2">
-      <div className="text-[11px] text-neutral-500">{label}</div>
-      <div className={`tnum text-sm font-medium ${tone(valueTone)}`}>{value}</div>
-      {sub ? <div className={`tnum text-[11px] ${tone(subTone)}`}>{sub}</div> : null}
+    <div
+      className={`rounded-[11px] border p-[12px_11px] ${
+        accent ? 'border-[rgba(52,211,153,0.25)] bg-[rgba(52,211,153,0.04)]' : 'border-[rgba(255,255,255,0.08)]'
+      }`}
+    >
+      <div className="mb-[7px] font-mono text-[9.5px] tracking-[0.08em] uppercase text-mut2">{label}</div>
+      <div className={`tnum font-display text-[1.15rem] font-bold ${tone(valueTone)}`}>{value}</div>
+      {sub ? <div className={`tnum mt-[3px] font-mono text-[11px] ${tone(subTone)}`}>{sub}</div> : null}
     </div>
   );
 }

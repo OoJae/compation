@@ -10,6 +10,7 @@ import { HedgeDashboard } from './HedgeDashboard';
 import { IdentityBadge } from './IdentityBadge';
 import { ProxyBadge } from './ProxyBadge';
 import { X402Panel } from './X402Panel';
+import { Logo } from '@/components/Logo';
 
 const EXAMPLE = 'I spend about $40,000/month renting H100 GPUs for my AI startup — hedge most of it.';
 
@@ -53,7 +54,7 @@ export function Chat({ meta, identity }: { meta: AgentMeta; identity: AgentIdent
     <main className="mx-auto grid w-full max-w-6xl flex-1 grid-cols-1 gap-5 px-5 py-6 lg:grid-cols-[1fr_minmax(330px,430px)]">
       {/* LEFT — conversation */}
       <section className="flex min-h-[62vh] flex-col">
-        <div className="flex-1 space-y-4 overflow-y-auto pr-1">
+        <div className="flex-1 space-y-[18px] overflow-y-auto pr-1 pb-[18px]">
           {messages.length === 0 && <Empty onPick={() => submit(EXAMPLE)} example={EXAMPLE} />}
           {messages.map((m) => {
             const mp = (m.parts ?? []) as unknown as AnyPart[];
@@ -69,7 +70,7 @@ export function Chat({ meta, identity }: { meta: AgentMeta; identity: AgentIdent
             return (
               <div key={m.id} className="space-y-2">
                 {reasoning && (
-                  <div className="rounded-lg border border-neutral-800/60 bg-neutral-900/30 px-3 py-2 text-xs italic text-neutral-500">
+                  <div className="rounded-[11px] border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.02)] px-3 py-2 font-serif text-xs italic text-mut3">
                     {reasoning}
                   </div>
                 )}
@@ -80,38 +81,43 @@ export function Chat({ meta, identity }: { meta: AgentMeta; identity: AgentIdent
           {busy && !lastAssistant && <Thinking />}
         </div>
 
-        <form onSubmit={(ev) => { ev.preventDefault(); submit(input); }} className="mt-4 flex items-end gap-2">
-          <textarea
-            ref={taRef}
-            value={input}
-            onChange={(e) => { setInput(e.target.value); autosize(e.target); }}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                submit(input);
-              }
-            }}
-            rows={1}
-            placeholder="Describe your H100 compute spend…"
-            className="max-h-[140px] min-h-[46px] flex-1 resize-none rounded-xl border border-neutral-800 bg-neutral-900/60 px-3 py-2.5 text-sm text-neutral-100 placeholder:text-neutral-600 focus:border-emerald-700/60 focus:outline-none"
-          />
-          <button
-            type="submit"
-            disabled={busy || !input.trim()}
-            className="h-[46px] rounded-xl bg-emerald-500 px-5 text-sm font-medium text-emerald-950 transition disabled:opacity-40"
+        <div className="sticky bottom-[14px]">
+          <form
+            onSubmit={(ev) => { ev.preventDefault(); submit(input); }}
+            className="flex items-end gap-[10px] rounded-[16px] border border-[rgba(255,255,255,0.12)] bg-[rgba(12,14,19,0.92)] py-[10px] pl-[16px] pr-[10px] backdrop-blur-[10px]"
           >
-            {busy ? '…' : 'Hedge'}
-          </button>
-        </form>
+            <textarea
+              ref={taRef}
+              value={input}
+              onChange={(e) => { setInput(e.target.value); autosize(e.target); }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  submit(input);
+                }
+              }}
+              rows={1}
+              placeholder="Describe your H100 compute spend…"
+              className="max-h-[140px] min-h-[46px] flex-1 resize-none border-none bg-transparent py-2 font-sans text-[15px] leading-[1.5] text-paper placeholder:text-mut3 focus:outline-none"
+            />
+            <button
+              type="submit"
+              disabled={busy || !input.trim()}
+              className="flex-none rounded-[11px] bg-teal px-5 py-[11px] font-sans text-[14.5px] font-semibold text-ink transition disabled:opacity-40"
+            >
+              {busy ? '…' : 'Hedge'}
+            </button>
+          </form>
+        </div>
         {error && (
-          <div className="mt-3 rounded-xl border border-red-900/50 bg-red-950/20 px-3 py-2.5 text-xs text-red-200">
+          <div className="mt-3 rounded-[11px] border border-[rgba(251,113,133,0.3)] bg-[rgba(251,113,133,0.06)] px-3 py-2.5 text-xs text-rose">
             {error.message || 'Something interrupted the agent. Please try again.'}
           </div>
         )}
       </section>
 
       {/* RIGHT — live agent state */}
-      <aside className="space-y-4">
+      <aside className="space-y-3">
         <ProxyBadge meta={meta} liveVenue={compute?.venueTicker} />
         <DecisionTrail toolParts={toolParts} />
         {compute && <HedgeConfirmation compute={compute} place={place} />}
@@ -119,7 +125,7 @@ export function Chat({ meta, identity }: { meta: AgentMeta; identity: AgentIdent
         <X402Panel />
         <IdentityBadge identity={identity} />
         {!compute && messages.length > 0 && busy && (
-          <div className="rounded-xl border border-neutral-800 bg-neutral-900/40 p-4 text-xs text-neutral-500">
+          <div className="rounded-[15px] border border-[rgba(255,255,255,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.016),rgba(255,255,255,0))] p-[17px] font-mono text-[12.5px] text-mut">
             Reading the live H100 index and computing the hedge…
           </div>
         )}
@@ -131,31 +137,40 @@ export function Chat({ meta, identity }: { meta: AgentMeta; identity: AgentIdent
 
 function Thinking() {
   return (
-    <div className="flex items-center gap-2 text-sm text-neutral-500">
-      <span>Reasoning</span>
-      <span className="inline-flex gap-1">
-        {['0ms', '150ms', '300ms'].map((d) => (
-          <span
-            key={d}
-            className="inline-block h-1.5 w-1.5 animate-bounce rounded-full bg-emerald-500/70"
-            style={{ animationDelay: d }}
-          />
-        ))}
-      </span>
+    <div className="flex items-center gap-3">
+      <Logo size={30} />
+      <div className="flex items-center gap-2 font-mono text-[13px] text-mut">
+        <span>Reasoning</span>
+        <span className="inline-flex gap-1">
+          {['0ms', '150ms', '300ms'].map((d) => (
+            <span
+              key={d}
+              className="inline-block h-1.5 w-1.5 animate-bounce rounded-full bg-teal/70"
+              style={{ animationDelay: d }}
+            />
+          ))}
+        </span>
+      </div>
     </div>
   );
 }
 
 function Bubble({ side, children }: { side: 'left' | 'right'; children: ReactNode }) {
+  if (side === 'right') {
+    return (
+      <div className="flex justify-end">
+        <div className="max-w-[74%] whitespace-pre-wrap rounded-[16px_16px_4px_16px] border border-[rgba(52,211,153,0.18)] bg-[rgba(52,211,153,0.08)] px-4 py-[14px] text-[15px] leading-[1.5] text-[#E4E7EB]">
+          {children}
+        </div>
+      </div>
+    );
+  }
   return (
-    <div className={side === 'right' ? 'flex justify-end' : 'flex justify-start'}>
-      <div
-        className={`max-w-[88%] whitespace-pre-wrap rounded-2xl px-4 py-2.5 text-sm ${
-          side === 'right'
-            ? 'border border-emerald-800/40 bg-emerald-500/10 text-emerald-50'
-            : 'border border-neutral-800 bg-neutral-900/60 text-neutral-100'
-        }`}
-      >
+    <div className="flex items-start gap-3">
+      <span className="mt-0.5 flex-none">
+        <Logo size={30} />
+      </span>
+      <div className="max-w-[88%] whitespace-pre-wrap rounded-[4px_16px_16px_16px] border border-[rgba(255,255,255,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.022),rgba(255,255,255,0))] px-5 py-[18px] text-[15px] leading-[1.6] text-[#C4C9D1]">
         {children}
       </div>
     </div>
@@ -165,14 +180,14 @@ function Bubble({ side, children }: { side: 'left' | 'right'; children: ReactNod
 function Empty({ onPick, example }: { onPick: () => void; example: string }) {
   return (
     <div className="flex h-full flex-col items-start justify-center gap-4 py-16">
-      <h2 className="text-2xl font-medium tracking-tight text-neutral-100">Hedge your GPU compute in one sentence.</h2>
-      <p className="max-w-md text-sm leading-relaxed text-neutral-500">
+      <h2 className="font-display text-[1.9rem] font-bold tracking-[-0.02em] text-paper">Hedge your GPU compute in one sentence.</h2>
+      <p className="max-w-md text-[15px] leading-relaxed text-mut">
         Tell Compation your monthly H100 spend. It reads the live on-chain H100 rental-rate index, computes a precise
         hedge with a deterministic risk engine, and opens the position — showing every step.
       </p>
       <button
         onClick={onPick}
-        className="rounded-lg border border-neutral-700 px-3.5 py-2.5 text-left text-sm text-neutral-300 transition hover:border-emerald-700/60 hover:text-emerald-200"
+        className="rounded-[11px] border border-[rgba(255,255,255,0.12)] px-3.5 py-2.5 text-left text-[14px] text-mut transition hover:border-[rgba(52,211,153,0.4)] hover:text-teal"
       >
         “{example}”
       </button>
@@ -182,7 +197,7 @@ function Empty({ onPick, example }: { onPick: () => void; example: string }) {
 
 function SidebarHint() {
   return (
-    <div className="rounded-xl border border-neutral-800 bg-neutral-900/40 p-4 text-xs leading-relaxed text-neutral-500">
+    <div className="rounded-[15px] border border-[rgba(255,255,255,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.016),rgba(255,255,255,0))] p-[17px] text-[12.5px] leading-relaxed text-mut">
       The decision trail (assess → compute → place → summarize) and a confirmation card with the H100 economics and the
       on-chain tx will appear here as the agent works.
     </div>

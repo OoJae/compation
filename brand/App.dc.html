@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;background:#07080B}
+  ::selection{background:#34D399;color:#07080B}
+  .tnum{font-variant-numeric:tabular-nums}
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:8px;border:2px solid #07080B}
+  @keyframes liveDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.78)}}
+  input[type=range].wf{-webkit-appearance:none;appearance:none;height:4px;border-radius:4px;background:linear-gradient(90deg,#34D399 0 var(--p,40%),rgba(255,255,255,0.1) var(--p,40%) 100%);outline:none}
+  input[type=range].wf::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:#ECEEF1;border:3px solid #07080B;box-shadow:0 0 0 1px rgba(255,255,255,0.2);cursor:pointer}
+  input[type=range].wf::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:#ECEEF1;border:3px solid #07080B;cursor:pointer}
+  @media (prefers-reduced-motion: reduce){*{animation:none!important}}
+</style>
+</helmet>
+<div ref="{{ rootRef }}" style="position:relative;min-height:100vh;background:#07080B;color:#ECEEF1;font-family:'Archivo',system-ui,sans-serif;overflow-x:clip;-webkit-font-smoothing:antialiased;">
+
+  <div aria-hidden="true" style="position:fixed;inset:0;z-index:0;pointer-events:none;background-image:radial-gradient(circle at 1px 1px, rgba(255,255,255,0.035) 1px, transparent 0);background-size:30px 30px;"></div>
+  <div aria-hidden="true" style="position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(80% 60% at 85% -5%, rgba(52,211,153,0.06) 0%, rgba(52,211,153,0) 50%), radial-gradient(70% 60% at 5% 105%, rgba(125,211,252,0.05) 0%, rgba(125,211,252,0) 55%);"></div>
+
+  <header style="position:sticky;top:0;z-index:20;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(7,8,11,0.72);backdrop-filter:blur(14px);">
+    <div style="max-width:1440px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;padding:13px clamp(16px,3vw,32px);">
+      <div style="display:flex;align-items:center;gap:12px;min-width:0;">
+        <span style="position:relative;width:28px;height:28px;border-radius:8px;border:1.5px solid rgba(236,238,241,0.55);display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;">
+          <span style="position:absolute;width:16px;height:1.7px;background:#F5B544;transform:rotate(38deg);border-radius:2px;"></span>
+          <span style="position:absolute;width:16px;height:1.7px;background:#34D399;transform:rotate(-38deg);border-radius:2px;box-shadow:0 0 7px rgba(52,211,153,0.7);"></span>
+        </span>
+        <div style="min-width:0;">
+          <div style="display:flex;align-items:center;gap:9px;">
+            <span style="width:8px;height:8px;border-radius:50%;background:#34D399;box-shadow:0 0 11px #34D399;animation:liveDot 2.4s ease-in-out infinite;"></span>
+            <span style="font-family:'Bricolage Grotesque','Archivo',sans-serif;font-weight:700;font-size:18px;letter-spacing:-0.02em;color:#ECEEF1;">Compation</span>
+          </div>
+          <div style="font-size:12.5px;color:#9AA1AC;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Autonomous hedging for NVIDIA&nbsp;H100 compute costs — on Injective.</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:11.5px;">
+        <span style="display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(125,211,252,0.35);border-radius:999px;padding:6px 11px;"><span style="color:#5C6472;">brain</span><span style="color:#7DD3FC;">Azure&nbsp;OpenAI</span></span>
+        <span style="display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(245,181,68,0.35);border-radius:999px;padding:6px 11px;"><span style="color:#5C6472;">exec</span><span data-exec-pill style="color:#F5B544;">sdk</span></span>
+        <span style="display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(255,255,255,0.14);border-radius:999px;padding:6px 11px;"><span style="color:#5C6472;">net</span><span style="color:#9AA1AC;">testnet</span></span>
+      </div>
+    </div>
+  </header>
+
+  <main style="position:relative;z-index:10;max-width:1440px;margin:0 auto;padding:clamp(16px,2.4vw,26px) clamp(16px,3vw,32px) 40px;display:grid;grid-template-columns:minmax(0,1fr) minmax(340px,408px);gap:clamp(16px,1.6vw,22px);align-items:start;">
+
+    <!-- LEFT: conversation -->
+    <section style="display:flex;flex-direction:column;min-height:calc(100vh - 150px);">
+      <div style="flex:1;display:flex;flex-direction:column;gap:18px;padding-bottom:18px;">
+        <div style="display:flex;justify-content:flex-end;">
+          <div style="max-width:74%;background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.18);border-radius:16px 16px 4px 16px;padding:14px 16px;font-size:15px;line-height:1.5;color:#E4E7EB;">I spend about $40,000/month renting H100 GPUs for my AI startup — hedge most of it.</div>
+        </div>
+
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <span style="position:relative;width:30px;height:30px;border-radius:9px;border:1.5px solid rgba(236,238,241,0.4);display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;margin-top:2px;">
+            <span style="position:absolute;width:15px;height:1.6px;background:#F5B544;transform:rotate(38deg);border-radius:2px;"></span>
+            <span style="position:absolute;width:15px;height:1.6px;background:#34D399;transform:rotate(-38deg);border-radius:2px;"></span>
+          </span>
+          <div style="max-width:88%;border:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg,rgba(255,255,255,0.022),rgba(255,255,255,0));border-radius:4px 16px 16px 16px;padding:18px 20px;">
+            <p style="margin:0;font-size:15px;line-height:1.6;color:#C4C9D1;">Live H100 index is <b data-index style="color:#34D399;font-family:'JetBrains Mono',monospace;">$2.85</b>/hr. I validated an <b style="color:#ECEEF1;">80% hedge</b> on your <b style="color:#ECEEF1;">$40,000/mo</b> exposure — notional <b style="color:#ECEEF1;">$31,999.80</b>, size <b style="color:#ECEEF1;">11,228 H100-h</b>, monthly carry <b style="color:#ECEEF1;">$0</b> on the H100 leg.</p>
+            <div style="margin:16px 0;padding:13px 15px;border-radius:11px;border:1px solid rgba(245,181,68,0.22);background:rgba(245,181,68,0.04);font-size:13.5px;line-height:1.55;color:#C9B68C;">The native H100 perp is paused, so execution routed to the transparent <b style="color:#F5D9A0;">INJ/USDC PERP</b> proxy — auto-routing back to native H100 when it relists.</p></div>
+            <p style="margin:0;font-size:15px;line-height:1.6;color:#C4C9D1;">Placed successfully on Injective.</p>
+            <div style="margin-top:12px;display:flex;flex-wrap:wrap;align-items:center;gap:9px;font-family:'JetBrains Mono',monospace;font-size:12.5px;">
+              <span style="color:#5C6472;">tx</span><span style="color:#BBF3DD;">FACEA10…000000</span>
+              <a href="https://testnet.explorer.injective.network" target="_blank" rel="noopener" style="color:#34D399;text-decoration:none;">view on explorer ↗</a>
+            </div>
+            <p style="margin:16px 0 0;font-size:13px;line-height:1.5;color:#7E8590;">This is tooling that executes your stated intent — not financial advice.</p>
+          </div>
+        </div>
+      </div>
+
+      <div style="position:sticky;bottom:14px;">
+        <div style="display:flex;align-items:flex-end;gap:10px;border:1px solid rgba(255,255,255,0.12);background:rgba(12,14,19,0.92);backdrop-filter:blur(10px);border-radius:16px;padding:10px 10px 10px 16px;">
+          <textarea rows="1" placeholder="Describe your H100 compute spend…" style="flex:1;resize:none;border:none;outline:none;background:transparent;color:#ECEEF1;font-family:'Archivo',sans-serif;font-size:15px;line-height:1.5;padding:8px 0;max-height:120px;"></textarea>
+          <button data-hedge type="button" style="flex:0 0 auto;border:none;cursor:pointer;background:#34D399;color:#07080B;font-family:'Archivo',sans-serif;font-weight:600;font-size:14.5px;padding:11px 20px;border-radius:11px;">Hedge</button>
+        </div>
+        <p style="margin:9px 4px 0;font-family:'JetBrains Mono',monospace;font-size:10.5px;line-height:1.5;color:#4F5663;">The model reasons; a deterministic risk engine sizes every position. Non-custodial — keys never touch the model.</p>
+      </div>
+    </section>
+
+    <!-- RIGHT: cockpit -->
+    <aside data-cockpit style="display:flex;flex-direction:column;gap:12px;">
+
+      <div style="display:flex;align-items:flex-start;gap:10px;border:1px solid rgba(245,181,68,0.25);background:rgba(245,181,68,0.04);border-radius:13px;padding:13px 15px;">
+        <span style="margin-top:4px;width:7px;height:7px;border-radius:50%;background:#F5B544;flex:0 0 auto;box-shadow:0 0 8px rgba(245,181,68,0.6);"></span>
+        <p style="margin:0;font-size:12.5px;line-height:1.5;color:#C9B68C;">Native H100 perp paused → executing on <b style="color:#F5D9A0;">INJ/USDC PERP</b> proxy → auto-routes to native H100 on relist.</p>
+      </div>
+
+      <div style="border:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg,rgba(255,255,255,0.016),rgba(255,255,255,0));border-radius:15px;padding:17px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.16em;color:#5C6472;margin-bottom:15px;">DECISION TRAIL</div>
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;gap:11px;"><span style="margin-top:3px;width:9px;height:9px;border-radius:50%;background:#34D399;flex:0 0 auto;box-shadow:0 0 8px rgba(52,211,153,0.5);"></span><div><div style="font-size:13.5px;color:#ECEEF1;font-weight:500;">Assess exposure</div><div data-trail-exposure style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#8B929C;margin-top:2px;">$40,000/mo · hedge 80% · 2×</div></div></div>
+          <div style="display:flex;gap:11px;"><span style="margin-top:3px;width:9px;height:9px;border-radius:50%;background:#34D399;flex:0 0 auto;box-shadow:0 0 8px rgba(52,211,153,0.5);"></span><div><div style="font-size:13.5px;color:#ECEEF1;font-weight:500;">Compute hedge</div><div data-trail-compute style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#8B929C;margin-top:2px;">H100 $32,000 → INJ/USDC PERP</div></div></div>
+          <div style="display:flex;gap:11px;"><span style="margin-top:3px;width:9px;height:9px;border-radius:50%;background:#34D399;flex:0 0 auto;box-shadow:0 0 8px rgba(52,211,153,0.5);"></span><div><div style="font-size:13.5px;color:#ECEEF1;font-weight:500;">Place hedge</div><div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#8B929C;margin-top:2px;">tx FACEA10…000000</div></div></div>
+          <div style="display:flex;gap:11px;"><span style="margin-top:3px;width:9px;height:9px;border-radius:50%;background:#34D399;flex:0 0 auto;box-shadow:0 0 8px rgba(52,211,153,0.5);"></span><div><div style="font-size:13.5px;color:#ECEEF1;font-weight:500;">Summarize</div></div></div>
+        </div>
+      </div>
+
+      <div style="border:1px solid rgba(52,211,153,0.22);background:linear-gradient(180deg,rgba(52,211,153,0.05),rgba(52,211,153,0));border-radius:15px;padding:17px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;color:#34D399;">H100 COMPUTE HEDGE</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8B929C;">index <b data-index style="color:#34D399;" class="tnum">$2.85</b>/hr</span>
+        </div>
+        <div data-big-notional class="tnum" style="font-family:'Bricolage Grotesque','Archivo',sans-serif;font-weight:700;font-size:clamp(2.2rem,4vw,2.9rem);letter-spacing:-0.02em;color:#ECEEF1;line-height:1;">$32,000</div>
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px;margin-top:11px;">
+          <span data-hedge-sub style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#8B929C;">hedged notional · 11,228 H100-h · ratio 80.0%</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#8B929C;">exposure <b data-exposure style="color:#C4C9D1;" class="tnum">14,035 H100-h/mo</b></span>
+        </div>
+      </div>
+
+      <div style="border:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg,rgba(255,255,255,0.016),rgba(255,255,255,0));border-radius:15px;padding:17px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;color:#5C6472;margin-bottom:13px;">EXECUTION · INJ/USDC PERP</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:12.5px;display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;justify-content:space-between;"><span style="color:#8B929C;">venue price</span><span class="tnum" style="color:#ECEEF1;">$4.25</span></div>
+          <div style="display:flex;justify-content:space-between;"><span style="color:#8B929C;">size</span><span data-ex-size class="tnum" style="color:#ECEEF1;">7,529.36 contracts</span></div>
+          <div style="display:flex;justify-content:space-between;"><span style="color:#8B929C;">notional</span><span data-ex-notional class="tnum" style="color:#ECEEF1;">$32,000</span></div>
+          <div style="display:flex;justify-content:space-between;"><span style="color:#8B929C;">margin (USDC)</span><span data-ex-margin class="tnum" style="color:#ECEEF1;">$16,000</span></div>
+          <div style="display:flex;justify-content:space-between;"><span style="color:#8B929C;">leverage</span><span class="tnum" style="color:#ECEEF1;">2×</span></div>
+          <div style="display:flex;justify-content:space-between;"><span style="color:#8B929C;">est. liquidation</span><span class="tnum" style="color:#ECEEF1;">$2.17</span></div>
+          <div style="display:flex;justify-content:space-between;"><span style="color:#8B929C;">liq. buffer</span><span class="tnum" style="color:#34D399;">49.0%</span></div>
+          <div style="display:flex;justify-content:space-between;"><span style="color:#8B929C;">est. slippage</span><span class="tnum" style="color:#34D399;">0.0%</span></div>
+        </div>
+      </div>
+
+      <div style="border:1px solid rgba(52,211,153,0.22);background:rgba(52,211,153,0.04);border-radius:15px;padding:15px 17px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+          <span style="display:inline-flex;align-items:center;gap:8px;"><span style="width:8px;height:8px;border-radius:50%;background:#34D399;box-shadow:0 0 9px #34D399;animation:liveDot 2.4s ease-in-out infinite;"></span><span style="font-size:13px;color:#ECEEF1;font-weight:500;">Position opened on-chain</span></span>
+          <span data-pos-line style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#8B929C;text-align:right;">long 7,529.36 · $32,000</span>
+        </div>
+        <div style="margin-top:12px;display:flex;align-items:center;gap:10px;border-top:1px solid rgba(255,255,255,0.07);padding-top:12px;font-family:'JetBrains Mono',monospace;font-size:12px;">
+          <span style="color:#BBF3DD;">FACEA100…000000</span>
+          <a href="https://testnet.explorer.injective.network" target="_blank" rel="noopener" style="color:#34D399;text-decoration:none;">view on explorer ↗</a>
+        </div>
+      </div>
+
+      <div style="border:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg,rgba(255,255,255,0.016),rgba(255,255,255,0));border-radius:15px;padding:17px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;color:#5C6472;">LIVE HEDGE DASHBOARD</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8B929C;"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#34D399;margin-right:5px;vertical-align:middle;"></span>H100 <b data-index style="color:#34D399;" class="tnum">$2.85</b>/hr</span>
+        </div>
+        <p style="margin:0 0 16px;font-size:12.5px;line-height:1.5;color:#8B929C;">Monthly compute bill <b data-dash-bill style="color:#C4C9D1;" class="tnum">$40,000</b> · hedged <b data-dash-ratio style="color:#C4C9D1;">80.0%</b> on H100</p>
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:9px;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;color:#8B929C;">IF THE H100 RATE MOVES</span>
+          <span data-wf-rate style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.2rem;color:#F5B544;" class="tnum">+20%</span>
+        </div>
+        <input data-wf-slider class="wf" type="range" min="-20" max="50" step="5" value="20" aria-label="H100 rate change" style="width:100%;cursor:pointer;" />
+        <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:13px;">
+          <button data-wf-preset="-20" type="button" style="cursor:pointer;border:1px solid rgba(255,255,255,0.12);background:transparent;color:#9AA1AC;font-family:'JetBrains Mono',monospace;font-size:11px;border-radius:8px;padding:6px 11px;">−20%</button>
+          <button data-wf-preset="0" type="button" style="cursor:pointer;border:1px solid rgba(255,255,255,0.12);background:transparent;color:#9AA1AC;font-family:'JetBrains Mono',monospace;font-size:11px;border-radius:8px;padding:6px 11px;">0%</button>
+          <button data-wf-preset="20" type="button" style="cursor:pointer;border:1px solid rgba(52,211,153,0.4);background:rgba(52,211,153,0.1);color:#34D399;font-family:'JetBrains Mono',monospace;font-size:11px;border-radius:8px;padding:6px 11px;">+20%</button>
+          <button data-wf-preset="50" type="button" style="cursor:pointer;border:1px solid rgba(255,255,255,0.12);background:transparent;color:#9AA1AC;font-family:'JetBrains Mono',monospace;font-size:11px;border-radius:8px;padding:6px 11px;">+50%</button>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:16px;">
+          <div style="border:1px solid rgba(255,255,255,0.08);border-radius:11px;padding:12px 11px;"><div style="font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.08em;color:#8B929C;margin-bottom:7px;">COMPUTE BILL</div><div data-wf-bill class="tnum" style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.15rem;color:#ECEEF1;">$48,000</div><div data-wf-billd style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#F5B544;margin-top:3px;">+$8,000</div></div>
+          <div style="border:1px solid rgba(255,255,255,0.08);border-radius:11px;padding:12px 11px;"><div style="font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.08em;color:#8B929C;margin-bottom:7px;">HEDGE P&amp;L</div><div data-wf-hedge class="tnum" style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.15rem;color:#34D399;">+$6,400</div><div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5C6472;margin-top:3px;">long H100</div></div>
+          <div style="border:1px solid rgba(52,211,153,0.25);background:rgba(52,211,153,0.04);border-radius:11px;padding:12px 11px;"><div style="font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.08em;color:#8B929C;margin-bottom:7px;">YOU CARRY</div><div data-wf-net class="tnum" style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.15rem;color:#ECEEF1;">$1,600</div><div data-wf-prot style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#34D399;margin-top:3px;">80% protected</div></div>
+        </div>
+        <div style="margin-top:15px;height:7px;border-radius:999px;overflow:hidden;display:flex;background:rgba(255,255,255,0.05);">
+          <div data-wf-bar style="width:80%;background:linear-gradient(90deg,#34D399,#2BB389);height:100%;"></div>
+          <div style="flex:1;background:rgba(245,181,68,0.5);height:100%;"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:10.5px;">
+          <span style="color:#34D399;">hedge absorbs <b data-wf-absorb>80%</b></span>
+          <span style="color:#F5B544;">you carry <b data-wf-carry>20%</b></span>
+        </div>
+        <p data-wf-explain style="margin:13px 0 0;font-size:12px;line-height:1.5;color:#7E8590;">When H100 rent spikes, the long hedge pays $6,400 back — you absorb $1,600 of an $8,000 increase.</p>
+      </div>
+
+      <div style="border:1px solid rgba(125,211,252,0.25);background:rgba(125,211,252,0.04);border-radius:15px;padding:17px;">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:9px;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;color:#7DD3FC;">AGENT SELF-PAYMENT · X402</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#5C6472;">it pays its own way</span>
+        </div>
+        <p style="margin:0 0 14px;font-size:13px;line-height:1.55;color:#A4ABB5;">Compation pays a tiny USDC micropayment for the live Injective market data it uses — settled on-chain via x402 (EIP-3009, gasless for the agent).</p>
+        <button data-x402 type="button" style="width:100%;cursor:pointer;border:none;background:#7DD3FC;color:#07080B;font-family:'Archivo',sans-serif;font-weight:600;font-size:13.5px;padding:11px;border-radius:11px;">Pay $0.01 USDC for live market data</button>
+        <div data-x402-receipt style="display:none;margin-top:12px;border-top:1px solid rgba(255,255,255,0.07);padding-top:12px;font-family:'JetBrains Mono',monospace;font-size:11.5px;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:7px;"><span style="color:#8B929C;">settled</span><span style="color:#7DD3FC;">0.01 USDC · ~640ms</span></div>
+          <div style="display:flex;justify-content:space-between;"><span style="color:#8B929C;">receipt</span><a href="https://testnet.blockscout.injective.network" target="_blank" rel="noopener" style="color:#7DD3FC;text-decoration:none;">3F9C…E1A2 ↗</a></div>
+        </div>
+      </div>
+
+      <div style="border:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg,rgba(255,255,255,0.016),rgba(255,255,255,0));border-radius:15px;padding:17px;">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:14px;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;color:#34D399;">ON-CHAIN IDENTITY &amp; ECONOMICS</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5C6472;text-align:right;">registered actor</span>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;display:flex;flex-direction:column;gap:11px;">
+          <div style="display:flex;justify-content:space-between;gap:12px;"><span style="color:#8B929C;">agent (inj)</span><span style="color:#C4C9D1;">inj1t4a8x0…deyu7v</span></div>
+          <div style="display:flex;justify-content:space-between;gap:12px;"><span style="color:#8B929C;">agent (evm)</span><span style="color:#C4C9D1;">0x5d7a73…9225f2</span></div>
+          <div style="display:flex;justify-content:space-between;gap:12px;"><span style="color:#8B929C;">fee recipient</span><span style="color:#34D399;">earns fee rebates</span></div>
+          <div style="display:flex;justify-content:space-between;gap:12px;"><span style="color:#8B929C;">ERC-8004</span><span style="color:#34D399;">registered · #49</span></div>
+        </div>
+        <a href="https://testnet.blockscout.injective.network/tx/0x0c96c4816f814e77d699ce9f00800c95d7d64abafcc5a3f250f3f3278452aea0" target="_blank" rel="noopener" style="display:inline-block;margin-top:13px;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#34D399;text-decoration:none;">identity registration tx ↗</a>
+        <p style="margin:13px 0 0;font-size:12px;line-height:1.5;color:#7E8590;">Compation's wallet is the fee recipient on every order — it earns Injective protocol fees as it hedges. A built-in business model, on-chain.</p>
+      </div>
+
+    </aside>
+  </main>
+
+  <footer style="position:relative;z-index:10;border-top:1px solid rgba(255,255,255,0.07);">
+    <p style="max-width:1440px;margin:0 auto;padding:16px clamp(16px,3vw,32px);font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.6;color:#4F5663;">Compation is tooling that executes the user's stated intent — not a custodian and not financial advice. The model reasons; a deterministic risk engine sizes every position.</p>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:960},&quot;monthlySpend&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:40000,&quot;min&quot;:5000,&quot;max&quot;:500000,&quot;step&quot;:5000,&quot;unit&quot;:&quot;$/mo&quot;,&quot;section&quot;:&quot;Demo&quot;,&quot;tsType&quot;:&quot;number&quot;},&quot;hedgeRatio&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:0.8,&quot;min&quot;:0.5,&quot;max&quot;:1,&quot;step&quot;:0.05,&quot;section&quot;:&quot;Demo&quot;,&quot;tsType&quot;:&quot;number&quot;},&quot;executor&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;sdk&quot;,&quot;options&quot;:[&quot;fake&quot;,&quot;sdk&quot;,&quot;mainnet&quot;],&quot;section&quot;:&quot;Demo&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  constructor(props){ super(props); this.rootRef = React.createRef(); }
+  renderVals(){ return { rootRef: this.rootRef }; }
+
+  componentDidMount(){
+    this.reduced = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    this.recompute();
+    const slider = this.q('[data-wf-slider]');
+    if(slider) slider.addEventListener('input', ()=> this.updateWhatIf());
+    this.qa('[data-wf-preset]').forEach(b=> b.addEventListener('click', ()=>{
+      const v=b.getAttribute('data-wf-preset'); const s=this.q('[data-wf-slider]'); if(s){ s.value=v; this.updateWhatIf(); }
+    }));
+    const x=this.q('[data-x402]');
+    if(x) x.addEventListener('click', ()=>{
+      const r=this.q('[data-x402-receipt]'); if(r) r.style.display='block';
+      x.textContent='Paid · 0.01 USDC settled ✓'; x.style.background='rgba(125,211,252,0.16)'; x.style.color='#7DD3FC';
+    });
+    const ta=this.q('textarea');
+    if(ta) ta.addEventListener('input', ()=>{ ta.style.height='auto'; ta.style.height=Math.min(120, ta.scrollHeight)+'px'; });
+    if(!this.reduced){ this._tick=setInterval(()=> this.tickIndex(), 2200); }
+  }
+  componentDidUpdate(){ this.recompute(); }
+  componentWillUnmount(){ if(this._tick) clearInterval(this._tick); }
+
+  q(s){ const r=this.rootRef.current; return r? r.querySelector(s): null; }
+  qa(s){ const r=this.rootRef.current; return r? Array.from(r.querySelectorAll(s)): []; }
+
+  money(n){ return '$'+Math.round(n).toLocaleString('en-US'); }
+  num(n,d){ return n.toLocaleString('en-US',{minimumFractionDigits:d||0,maximumFractionDigits:d||0}); }
+  set(sel,txt,color){ const e=this.q(sel); if(e){ e.textContent=txt; if(color) e.style.color=color; } }
+
+  recompute(){
+    const spend = +(this.props.monthlySpend ?? 40000);
+    const ratio = +(this.props.hedgeRatio ?? 0.8);
+    const exec = (this.props.executor ?? 'sdk');
+    const P=2.85, venueP=4.25, L=2;
+    const Q = spend/P, size = ratio*Q, notional = ratio*spend, venueSize = notional/venueP, margin = notional/L;
+    this._spend = spend; this._ratio = ratio;
+    this.qa('[data-big-notional]').forEach(e=> e.textContent=this.money(notional));
+    this.set('[data-hedge-sub]', 'hedged notional · '+this.num(size,0)+' H100-h · ratio '+(ratio*100).toFixed(1)+'%');
+    this.set('[data-exposure]', this.num(Q,0)+' H100-h/mo');
+    this.set('[data-ex-size]', this.num(venueSize,2)+' contracts');
+    this.set('[data-ex-notional]', this.money(notional));
+    this.set('[data-ex-margin]', this.money(margin));
+    this.set('[data-pos-line]', 'long '+this.num(venueSize,2)+' · '+this.money(notional));
+    this.set('[data-trail-exposure]', this.money(spend)+'/mo · hedge '+Math.round(ratio*100)+'% · '+L+'×');
+    this.set('[data-trail-compute]', 'H100 '+this.money(notional)+' → INJ/USDC PERP');
+    this.set('[data-dash-bill]', this.money(spend));
+    this.set('[data-dash-ratio]', (ratio*100).toFixed(1)+'%');
+    const ep=this.q('[data-exec-pill]');
+    if(ep){ ep.textContent=exec; ep.style.color = exec==='mainnet'?'#FB7185':(exec==='sdk'?'#F5B544':'#9AA1AC'); }
+    this.updateWhatIf();
+  }
+
+  updateWhatIf(){
+    const slider=this.q('[data-wf-slider]'); if(!slider) return;
+    const v=+slider.value, pct=v/100;
+    const spend=this._spend||40000, ratio=this._ratio||0.8;
+    slider.style.setProperty('--p', ((v+20)/70*100).toFixed(1)+'%');
+    const signed = n => (n>0?'+':(n<0?'−':''))+this.money(Math.abs(n));
+    const billDelta=spend*pct, hedge=spend*pct*ratio, carry=spend*Math.abs(pct)*(1-ratio);
+    this.set('[data-wf-rate]', (v>0?'+':(v<0?'−':''))+Math.abs(v)+'%', v>=0?'#F5B544':'#7DD3FC');
+    this.set('[data-wf-bill]', this.money(spend+billDelta));
+    this.set('[data-wf-billd]', billDelta===0?'no change':signed(billDelta), billDelta>0?'#F5B544':(billDelta<0?'#7DD3FC':'#5C6472'));
+    this.set('[data-wf-hedge]', hedge===0?'$0':signed(hedge), hedge>=0?'#34D399':'#FB7185');
+    this.set('[data-wf-net]', this.money(carry));
+    this.set('[data-wf-prot]', Math.round(ratio*100)+'% protected');
+    this.set('[data-wf-absorb]', Math.round(ratio*100)+'%');
+    this.set('[data-wf-carry]', Math.round((1-ratio)*100)+'%');
+    const bar=this.q('[data-wf-bar]'); if(bar) bar.style.width=(ratio*100)+'%';
+    this.qa('[data-wf-preset]').forEach(b=>{
+      const on = (+b.getAttribute('data-wf-preset'))===v;
+      b.style.borderColor = on?'rgba(52,211,153,0.4)':'rgba(255,255,255,0.12)';
+      b.style.background = on?'rgba(52,211,153,0.1)':'transparent';
+      b.style.color = on?'#34D399':'#9AA1AC';
+    });
+    if(v===0){ this.set('[data-wf-explain]', 'At a flat rate, the hedge and your bill both hold — carry on the H100 leg is about $0/mo.'); }
+    else if(v>0){ this.set('[data-wf-explain]', 'When H100 rent spikes, the long hedge pays '+this.money(hedge)+' back — you absorb '+this.money(carry)+' of a '+this.money(billDelta)+' increase.'); }
+    else { this.set('[data-wf-explain]', 'If H100 rent falls, your bill drops '+this.money(Math.abs(billDelta))+' — the hedge gives back '+this.money(Math.abs(hedge))+', so you keep '+this.money(carry)+' net.'); }
+  }
+
+  tickIndex(){
+    const base=2.85, val=(base + (Math.random()-0.5)*0.04);
+    this.qa('[data-index]').forEach(e=> e.textContent='$'+val.toFixed(2));
+  }
+}
+</script>
+</body>
+</html>
